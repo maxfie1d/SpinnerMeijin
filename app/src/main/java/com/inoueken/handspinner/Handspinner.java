@@ -12,7 +12,7 @@ public class Handspinner {
     }
 
     public float getRotation() {
-        return 359.0f;
+        return 360.0f;
     }
 
     public void addForce(int amount) {
