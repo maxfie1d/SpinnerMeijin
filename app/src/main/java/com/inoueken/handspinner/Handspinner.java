@@ -12,7 +12,7 @@ public class Handspinner {
     private float angle;
     private float angularVelocity;
     private float registanceForce;
-    private float rotatationTaskInterval;
+    private float rotationTaskInterval;
     private Timer t;
     private float mass;
 
@@ -21,7 +21,7 @@ public class Handspinner {
         this.angle = 0;
         this.angularVelocity = 0;
         this.registanceForce = 0;
-        this.rotatationTaskInterval = 0.001f;
+        this.rotationTaskInterval = 1;
         this.t = new Timer();
         this.mass = 1;
     }
@@ -38,28 +38,25 @@ public class Handspinner {
         return this._rotationCount;
     }
 
-    private void rotate(){
-        t.schedule(new rotationTask(),0,(long) rotatationTaskInterval);
+    public void rotate() {
+        t.schedule(new rotationTask(), 0, (long) rotationTaskInterval);
     }
 
     private class rotationTask extends TimerTask {
-        public void run(){
+        public void run() {
             calc();
         }
-        private void calc(){
-            angle += angularVelocity * rotatationTaskInterval;
-            if(angle >= 360f){
-                angle -= 360f;
-                _rotationCount++;
-            }else if(angle <= -360f){
-                angle += 360f;
-                _rotationCount++;
-            }
-            angularVelocity -= registanceForce * rotatationTaskInterval;
+
+        private void calc() {
+            angle += angularVelocity * rotationTaskInterval;
+            _rotationCount += Math.abs((int) (angle / 360f));
+            angle -= 360f * (int) (angle / 360f);
+            angularVelocity -= registanceForce * rotationTaskInterval;
+
         }
     }
 
-    private void finishRotationTask(){
+    private void finishRotationTask() {
         t.cancel();
     }
 }

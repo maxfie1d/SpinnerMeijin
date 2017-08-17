@@ -19,8 +19,8 @@ public class SelectSpinnerActivityModel {
 
     public void onBuyButtonPressed() {
         // 現在表示されているスピナーが購入可能か？
-        if(this._currentSpinner){
+        //if(this._currentSpinner){
             // 購入
-        }
+        //}
     }
 }
