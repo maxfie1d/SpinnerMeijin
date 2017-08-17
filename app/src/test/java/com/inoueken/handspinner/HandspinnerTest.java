@@ -3,6 +3,7 @@ package com.inoueken.handspinner;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+
 /**
  * Created by y-fujiwr on 2017/08/17.
  */
@@ -19,8 +20,9 @@ public class HandspinnerTest {
             e.printStackTrace();
         }
         System.out.println(hs.getAngle());
-        assert(hs.getAngle()>=0);
+        assert (hs.getAngle() >= 0);
     }
+
     @Test
     public void addInverseVelocityTest() throws InterruptedException {
         Handspinner hs = new Handspinner();
@@ -32,13 +34,22 @@ public class HandspinnerTest {
             e.printStackTrace();
         }
         System.out.println(hs.getAngle());
-        assert(hs.getAngle()<=0);
+        assert (hs.getAngle() <= 0);
     }
+
     @Test
     public void rotationCountTest() throws InterruptedException {
-        Handspinner hs = new Handspinner();
+        final Handspinner hs = new Handspinner();
         hs.rotate();
         hs.addForce(30.0f);
+        hs.addRotationCountChangedEventListener(new RotationCountChangedEventListener() {
+            @Override
+            public void rotationChanged(RotationCountChangedEventArgs args) {
+                System.out.println(args.getNewCount());
+                System.out.println(hs.getAngle());
+            }
+        });
+
         try {
             Thread.sleep(700);
         } catch (InterruptedException e) {
@@ -46,8 +57,11 @@ public class HandspinnerTest {
         }
         System.out.println(hs.getAngle());
         System.out.println(hs.getRotationCount());
-        assert(hs.getRotationCount()>0);
+        assert (hs.getRotationCount() > 0);
+
+
     }
+
     @Test
     public void inverseRotationCountTest() throws InterruptedException {
         Handspinner hs = new Handspinner();
@@ -60,7 +74,7 @@ public class HandspinnerTest {
         }
         System.out.println(hs.getAngle());
         System.out.println(hs.getRotationCount());
-        assert(hs.getRotationCount()>0);
+        assert (hs.getRotationCount() > 0);
     }
 
 }

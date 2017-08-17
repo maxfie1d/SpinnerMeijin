@@ -15,6 +15,7 @@ public class Handspinner {
     private float rotationTaskInterval;
     private Timer t;
     private float mass;
+    private ArrayList<RotationCountChangedEventListener> _listeners;
 
     public Handspinner() {
         this._rotationCount = 0;
@@ -24,6 +25,7 @@ public class Handspinner {
         this.rotationTaskInterval = 1;
         this.t = new Timer();
         this.mass = 1;
+        this._listeners = new ArrayList<>();
     }
 
     public float getAngle() {
@@ -49,14 +51,25 @@ public class Handspinner {
 
         private void calc() {
             angle += angularVelocity * rotationTaskInterval;
-            _rotationCount += Math.abs((int) (angle / 360f));
+            int oldRotationCount = _rotationCount;
+            int rotationCountDiff = Math.abs((int) (angle / 360f));
+            _rotationCount += rotationCountDiff;
             angle -= 360f * (int) (angle / 360f);
             angularVelocity -= registanceForce * rotationTaskInterval;
 
+            if (rotationCountDiff > 0) {
+                for (RotationCountChangedEventListener listener : _listeners) {
+                    listener.rotationChanged(new RotationCountChangedEventArgs(oldRotationCount, _rotationCount));
+                }
+            }
         }
     }
 
     private void finishRotationTask() {
         t.cancel();
+    }
+
+    public void addRotationCountChangedEventListener(RotationCountChangedEventListener listener) {
+        this._listeners.add(listener);
     }
 }
