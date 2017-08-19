@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         // pivotXの値はそのまま使う
         this._spinner.setPivotX(this._spinner.getPivotX());
         // pivotYの値は回転中心が合うように補正して使う
-        this._spinner.setPivotY(this._spinner.getPivotY() * 1.19f);
+        this._spinner.setPivotY(this._spinner.getPivotY() * 1.02f);
     }
 
     @Override
