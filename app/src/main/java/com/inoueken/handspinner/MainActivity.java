@@ -6,23 +6,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 
+import com.inoueken.handspinner.models.HandspinnerShop;
+
+
 public class MainActivity extends AppCompatActivity {
     private Handler _handler;
     private Runnable _r;
     private ImageView _spinner;
+    private Handspinner _handspinnerModel;
 
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
-        // onWindowFocusChangedを使えばUIのサイズが確定するようで
-        // getPivotX()などが0にならない
+        HandspinnerShop shop = new HandspinnerShop();
+        Handspinner spinner = shop.getSpinnerByName("ベーシックスピナー");
+        this._handspinnerModel = spinner;
 
-        // pivotXの値はそのまま使う
-        this._spinner.setPivotX(this._spinner.getPivotX());
-        // pivotYの値は回転中心が合うように補正して使う
-        this._spinner.setPivotY(this._spinner.getPivotY() * 1.02f);
+        this.changeSpinner(spinner);
     }
 
     @Override
@@ -59,5 +61,14 @@ public class MainActivity extends AppCompatActivity {
 
         // 定期実行ハンドラを削除
         this._handler.removeCallbacks(this._r);
+    }
+
+    private void changeSpinner(Handspinner spinner) {
+        // 回転中心が合うようにピボット位置を補正する
+        this._spinner.setPivotX(this._spinner.getPivotX() * spinner.getMetadata().getPivotXCorrectionScale());
+        this._spinner.setPivotY(this._spinner.getPivotY() * spinner.getMetadata().getPivotYCorrectionScale());
+
+        // ハンドスピナーの画像を差し替える
+        this._spinner.setImageResource(spinner.getMetadata().getImageId());
     }
 }
