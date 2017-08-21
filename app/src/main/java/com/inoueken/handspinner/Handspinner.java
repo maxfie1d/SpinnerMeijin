@@ -1,11 +1,10 @@
 package com.inoueken.handspinner;
 
+import com.inoueken.handspinner.models.HandspinnerMetadata;
+
 import java.util.*;
 import java.util.Timer;
 
-/**
- * Created by n-isida on 2017/08/08.
- */
 
 public class Handspinner {
     private int _rotationCount;
@@ -16,11 +15,9 @@ public class Handspinner {
     private Timer t;
     private float mass;
     private ArrayList<RotationCountChangedEventListener> _listeners;
-    private int agility;
-    private int cost;
-    private int buyFlag;
+    private HandspinnerMetadata _metadata;
 
-    public Handspinner() {
+    public Handspinner(HandspinnerMetadata metadata) {
         this._rotationCount = 0;
         this.angle = 0;
         this.angularVelocity = 0;
@@ -29,6 +26,7 @@ public class Handspinner {
         this.t = new Timer();
         this.mass = 1;
         this._listeners = new ArrayList<>();
+        this._metadata = metadata;
     }
 
     public float getAngle() {
@@ -74,5 +72,9 @@ public class Handspinner {
 
     public void addRotationCountChangedEventListener(RotationCountChangedEventListener listener) {
         this._listeners.add(listener);
+    }
+
+    public HandspinnerMetadata getMetadata(){
+        return this._metadata;
     }
 }
