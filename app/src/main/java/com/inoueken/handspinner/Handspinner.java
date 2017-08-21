@@ -16,6 +16,9 @@ public class Handspinner {
     private Timer t;
     private float mass;
     private ArrayList<RotationCountChangedEventListener> _listeners;
+    private int agility;
+    private int cost;
+    private int buyFlag;
 
     public Handspinner() {
         this._rotationCount = 0;
