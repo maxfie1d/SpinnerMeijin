@@ -3,6 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.inoueken.handspinner.MainActivity">
@@ -26,6 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
+            android:layout_gravity="bottom|right"
             android:layout_marginBottom="11dp"
             android:layout_marginLeft="11dp"
             android:layout_marginRight="11dp"
@@ -54,28 +56,27 @@
             fab:menu_labels_textColor="#f2f1f1"
             fab:menu_labels_textSize="15sp"
             fab:menu_openDirection="up"
-            fab:menu_showShadow="true"
-            android:layout_gravity="bottom|right">
+            fab:menu_showShadow="true">
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/btn_show_credits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                fab:fab_label="クレジット"
-                fab:fab_size="mini"
+                android:src="@drawable/ic_action_info"
                 fab:fab_colorNormal="@color/colorAccent"
                 fab:fab_colorPressed="@color/colorAccentLight"
-                android:src="@drawable/ic_action_info"/>
+                fab:fab_label="クレジット"
+                fab:fab_size="mini" />
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/btn_goto_shop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                fab:fab_label="ショップへ移動"
-                fab:fab_size="mini"
+                android:src="@drawable/ic_toys"
                 fab:fab_colorNormal="@color/colorAccent"
                 fab:fab_colorPressed="@color/colorAccentLight"
-                android:src="@drawable/ic_toys"/>
+                fab:fab_label="ショップへ移動"
+                fab:fab_size="mini" />
         </com.github.clans.fab.FloatingActionMenu>
     </FrameLayout>
 

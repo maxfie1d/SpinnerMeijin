@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.clans.fab.FloatingActionButton;
@@ -28,6 +29,9 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private GestureDetector ges;
     private double beforePositionX = 0;
     private double beforePositionY = 0;
+    private double centerX = 0;
+    private double centerY = 0;
+    private RelativeLayout r1 = null;
 
     private float _defaultPivotX = -1.0f;
     private float _defaultPivotY = -1.0f;
@@ -48,7 +52,10 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         this._handspinnerModel = spinner;
         this._handspinnerModel.rotate();
 
+        r1 = (RelativeLayout) findViewById(R.id.relativeLayout1);
+
         this.changeSpinner(spinner);
+
     }
 
     @Override
@@ -129,6 +136,10 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
         // ハンドスピナーの画像を差し替える
         this._spinner.setImageResource(spinner.getMetadata().getImageId());
+
+        // ハンドスピナーの回転軸の座標を計算しておく
+        centerX = _spinner.getLeft() + _spinner.getPivotX();
+        centerY = displayMetrics.heightPixels - r1.getHeight() + _spinner.getTop() + _spinner.getPivotY();
     }
 
     @Override
@@ -158,11 +169,10 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 
-        //TODO 回転中心がうまく捉えられていない． flingも同様だと思われる．
-        double e1X = (e1.getX() - _spinner.getPivotX()) / displayMetrics.widthPixels * 25.4;
-        double e1Y = (e1.getY() - _spinner.getPivotY()) / displayMetrics.heightPixels * 25.4;
-        double e2X = (e2.getX() - _spinner.getPivotX()) / displayMetrics.widthPixels * 25.4;
-        double e2Y = (e2.getY() - _spinner.getPivotY()) / displayMetrics.heightPixels * 25.4;
+        double e1X = e1.getX() - centerX ;
+        double e1Y = e1.getY() - centerY ;
+        double e2X = e2.getX() - centerX ;
+        double e2Y = e2.getY() - centerY ;
 
         if (beforePositionX == 0) {
             beforePositionX = e1X;
@@ -191,10 +201,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         double vY = velocityY / displayMetrics.heightPixels * 25.4;
         double touchX = e2.getX();
         double touchY = e2.getY();
-        double spinnerCenterX = _spinner.getPivotX();
-        double spinnerCenterY = _spinner.getPivotY();
-        double vectorX = touchX - spinnerCenterX;
-        double vectorY = touchY - spinnerCenterY;
+        double vectorX = touchX - centerX;
+        double vectorY = touchY - centerY;
         double distanceFromCenter = Math.sqrt(Math.pow(vectorX, 2) + Math.pow(vectorY, 2));
         double validVelocitySize = Math.abs(vectorX * vX + vectorY * vY) / Math.sqrt(vectorX * vectorX + vectorY * vectorY);
         double arm = distanceFromCenter + Math.sqrt(vX * vX + vY * vY - validVelocitySize * validVelocitySize);
@@ -202,9 +210,9 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
 
         if (theta < 0) {
-            _handspinnerModel.addForce(-(float) (validVelocitySize * arm / 100000));
+            _handspinnerModel.addForce(-(float) (validVelocitySize * arm / 50000));
         } else if (theta != 0 && theta != Math.PI) {
-            _handspinnerModel.addForce((float) (validVelocitySize * arm / 100000));
+            _handspinnerModel.addForce((float) (validVelocitySize * arm / 50000));
         }
         return true;
     }
