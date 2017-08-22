@@ -29,6 +29,12 @@ public class Handspinner {
         this._metadata = metadata;
     }
 
+    public void addAngle(float amount) {
+        angle += amount;
+    }
+    public void setAngularVelocity(float value){
+        angularVelocity = value;
+    }
     public float getAngle() {
         return angle;
     }

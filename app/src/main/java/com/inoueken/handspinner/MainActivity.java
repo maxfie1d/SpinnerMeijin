@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private Display display;
     private DisplayMetrics displayMetrics;
     private GestureDetector ges;
+    private double beforePositionX = 0;
+    private double beforePositionY = 0;
 
     private float _defaultPivotX = -1.0f;
     private float _defaultPivotY = -1.0f;
@@ -131,14 +133,18 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     @Override
     public boolean onDown(MotionEvent e) {
-        System.out.println("おんだうん");
+        _handspinnerModel.setAngularVelocity(0f);
+        beforePositionX = 0;
+        beforePositionY = 0;
         return true;
     }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         ges.onTouchEvent(event);
-        return false;
+        return true;
     }
+
     @Override
     public void onShowPress(MotionEvent e) {
 
@@ -151,6 +157,26 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+
+        //TODO 回転中心がうまく捉えられていない． flingも同様だと思われる．
+        double e1X = (e1.getX() - _spinner.getPivotX()) / displayMetrics.widthPixels * 25.4;
+        double e1Y = (e1.getY() - _spinner.getPivotY()) / displayMetrics.heightPixels * 25.4;
+        double e2X = (e2.getX() - _spinner.getPivotX()) / displayMetrics.widthPixels * 25.4;
+        double e2Y = (e2.getY() - _spinner.getPivotY()) / displayMetrics.heightPixels * 25.4;
+
+        if (beforePositionX == 0) {
+            beforePositionX = e1X;
+            beforePositionY = e1Y;
+        }
+
+        double theta = Math.atan2(beforePositionX * e2Y - beforePositionY * e2X, beforePositionX * e2X + beforePositionY * e2Y);
+
+        _handspinnerModel.setAngularVelocity(0f);
+        _handspinnerModel.addAngle((float) (theta / Math.PI * 180));
+
+        beforePositionX = e2X;
+        beforePositionY = e2Y;
+
         return true;
     }
 
@@ -163,8 +189,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         double vX = velocityX / displayMetrics.widthPixels * 25.4;
         double vY = velocityY / displayMetrics.heightPixels * 25.4;
-        double touchX = e1.getX();
-        double touchY = e1.getY();
+        double touchX = e2.getX();
+        double touchY = e2.getY();
         double spinnerCenterX = _spinner.getPivotX();
         double spinnerCenterY = _spinner.getPivotY();
         double vectorX = touchX - spinnerCenterX;
@@ -172,13 +198,13 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         double distanceFromCenter = Math.sqrt(Math.pow(vectorX, 2) + Math.pow(vectorY, 2));
         double validVelocitySize = Math.abs(vectorX * vX + vectorY * vY) / Math.sqrt(vectorX * vectorX + vectorY * vectorY);
         double arm = distanceFromCenter + Math.sqrt(vX * vX + vY * vY - validVelocitySize * validVelocitySize);
-        double theta = Math.atan2(vectorX * velocityY - vectorY * velocityX, vectorX * velocityX + vectorY * velocityY);
+        double theta = Math.atan2(vectorX * vY - vectorY * vX, vectorX * vX + vectorY * vY);
 
 
         if (theta < 0) {
-            _handspinnerModel.addForce(-(float) (validVelocitySize * arm/100000));
+            _handspinnerModel.addForce(-(float) (validVelocitySize * arm / 100000));
         } else if (theta != 0 && theta != Math.PI) {
-            _handspinnerModel.addForce((float) (validVelocitySize * arm/100000));
+            _handspinnerModel.addForce((float) (validVelocitySize * arm / 100000));
         }
         return true;
     }
