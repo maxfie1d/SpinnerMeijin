@@ -4,33 +4,22 @@ import com.inoueken.handspinner.Handspinner;
 
 import rx.Subscription;
 import rx.functions.Action1;
-import rx.subjects.BehaviorSubject;
 
 public class MainActivityModel {
-    private Handspinner _currentHandspinnerModel;
-    private BehaviorSubject<Handspinner> _handspinnerChangedEvent;
-
+    private GameManager _gameManager;
 
     public MainActivityModel() {
-        this._handspinnerChangedEvent = BehaviorSubject.create();
-
-        HandspinnerShop shop = new HandspinnerShop();
-        Handspinner spinner = shop.getSpinnerByName("ベーシックスピナー");
-        this._currentHandspinnerModel = spinner;
-    }
-
-    private void changeHandspinner(Handspinner handspinner) {
-        this._handspinnerChangedEvent.onNext(handspinner);
+        this._gameManager = new GameManager();
     }
 
     public Subscription subscribeHandspinnerChanged(Action1<Handspinner> action) {
-        return this._handspinnerChangedEvent.subscribe(action);
+        return this._gameManager.subscribeHandspinnerChanged(action);
     }
 
     /**
      * View側の準備ができたら呼び出す
      */
-    public void getReady(){
-       this.changeHandspinner(this._currentHandspinnerModel);
+    public void getReady() {
+        this._gameManager.start();
     }
 }
