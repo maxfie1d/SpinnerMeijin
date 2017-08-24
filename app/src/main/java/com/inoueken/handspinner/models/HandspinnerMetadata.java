@@ -5,6 +5,9 @@ package com.inoueken.handspinner.models;
  * ハンドスピナーの属性を格納するクラスだよ♡
  */
 public class HandspinnerMetadata {
+    // ハンドスピナーのID
+    private String _id;
+
     // 表示名
     private String _displayName;
 
@@ -22,6 +25,7 @@ public class HandspinnerMetadata {
     private int _imageId;
 
     public HandspinnerMetadata(
+            String id,
             String displayName,
             int speed,
             String description,
@@ -30,6 +34,7 @@ public class HandspinnerMetadata {
             float pivotYCorrectionScale,
             String imagePath,
             int imageId) {
+        this._id = id;
         this._displayName = displayName;
         this._speed = speed;
         this._description = description;
@@ -38,6 +43,10 @@ public class HandspinnerMetadata {
         this._pivotYCorrectionScale = pivotYCorrectionScale;
         this._imagePath = imagePath;
         this._imageId = imageId;
+    }
+
+    public String getId(){
+        return this._id;
     }
 
     public String getDisplayName() {

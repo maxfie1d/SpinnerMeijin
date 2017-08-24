@@ -13,7 +13,7 @@ public class MainActivityModel {
     }
 
     public Subscription subscribeHandspinnerChanged(Action1<Handspinner> action) {
-        return this._gameManager.subscribeHandspinnerChanged(action);
+        return this._gameManager.getPlayer().subscribeHandspinnerChanged(action);
     }
 
     /**

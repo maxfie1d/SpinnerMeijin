@@ -19,6 +19,7 @@ public class HandspinnerShop {
         // ベーシックスピナー
         Handspinner basicSpinner = new Handspinner(
                 new HandspinnerMetadata(
+                        "basic_spinner",
                         "ベーシックスピナー",
                         1,
                         "何の変哲もない普通のハンドスピナー。初心者はまずこれを使う。",
@@ -31,6 +32,7 @@ public class HandspinnerShop {
         // レアスピナー
         Handspinner rareSpinner = new Handspinner(
                 new HandspinnerMetadata(
+                        "rare_spinner",
                         "レアスピナー",
                         2,
                         "普通のお店には売っていないレアなハンドスピナー。気持ちベーシックスピナーよりよく回る気がする。",
@@ -43,6 +45,7 @@ public class HandspinnerShop {
         // 伝説のスピナー
         Handspinner legendarySpinner = new Handspinner(
                 new HandspinnerMetadata(
+                        "legendary_spinner",
                         "伝説のスピナー",
                         3,
                         "世界に1つしかないハンドスピナー。岩に刺さっていたところを抜いてきた。回す人間の能力が試される。",
@@ -55,6 +58,7 @@ public class HandspinnerShop {
         // ウルトラスーパーハイスペックスピナー(長いのでウルトラスピナーと省略)
         Handspinner ultraSpinner = new Handspinner(
                 new HandspinnerMetadata(
+                        "ultra_spinner",
                         "ウルトラスーパーハイスペックスピナー",
                         4,
                         "どこか宇宙を感じる壮大なスピナー。このスピナーが止まっているところを見た者はいない。",
@@ -67,6 +71,7 @@ public class HandspinnerShop {
         // かき揚げスピナー
         Handspinner kakiageSpinner = new Handspinner(
                 new HandspinnerMetadata(
+                        "kakiage_spinner",
                         "かき揚げスピナー",
                         0,
                         "何の変哲もない普通のハンドスピナー。ついにかき揚げがハンドスピナーになった。全体的に油まみれでベトベト。もうﾏｼﾞむり。。",
@@ -86,12 +91,13 @@ public class HandspinnerShop {
         return this._handspinners;
     }
 
-    public Handspinner getSpinnerByName(String name) {
-        for (Handspinner spinner : this._handspinners) {
-            if(spinner.getMetadata().getDisplayName().equals(name)){
-                return spinner;
-            }
+    public Handspinner getSpinnerById(String handspinnerId){
+        for (Handspinner spinner :this._handspinners) {
+           if(spinner.getMetadata().getId().equals(handspinnerId)) {
+               return spinner;
+           }
         }
+
         return null;
     }
 }
