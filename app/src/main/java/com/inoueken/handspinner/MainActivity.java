@@ -1,5 +1,7 @@
 package com.inoueken.handspinner;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         final FloatingActionMenu actionMenu = (FloatingActionMenu) findViewById(R.id.action_menu);
         final FloatingActionButton btnShowCredits = (FloatingActionButton) findViewById(R.id.btn_show_credits);
         final FloatingActionButton btnGotoShop = (FloatingActionButton) findViewById(R.id.btn_goto_shop);
+        final FloatingActionButton btnBuyHandspinner = (FloatingActionButton) findViewById(R.id.btn_buy_handspinner);
 
         final MaterialDialog creditsDialog = new MaterialDialog.Builder(this)
                 .title("クレジット")
@@ -88,6 +91,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("ハンドスピナーショップに移動するやで");
+                actionMenu.close(true);
+            }
+        });
+
+        btnBuyHandspinner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Amazonのハンドスピナーのページに移動する
+                final String url = "https://www.amazon.co.jp/s/ref=nb_sb_noss_1?__mk_ja_JP=カタカナ&url=search-alias%3Daps&field-keywords=ハンドスピナー";
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(browserIntent);
                 actionMenu.close(true);
             }
         });

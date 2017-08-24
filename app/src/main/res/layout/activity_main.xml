@@ -58,6 +58,16 @@
             android:layout_gravity="bottom|right">
 
             <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/btn_buy_handspinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_label="ハンドスピナーを買う"
+                fab:fab_size="mini"
+                fab:fab_colorNormal="@color/colorAccent"
+                fab:fab_colorPressed="@color/colorAccentLight"
+                android:src="@drawable/ic_open_in_new"/>
+
+            <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/btn_show_credits"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
