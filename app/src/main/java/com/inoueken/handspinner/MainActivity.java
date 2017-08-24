@@ -11,41 +11,47 @@ import android.widget.ImageView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.inoueken.handspinner.models.HandspinnerShop;
+import com.inoueken.handspinner.models.MainActivityModel;
+
+import rx.functions.Action1;
 
 
 public class MainActivity extends AppCompatActivity {
     private Handler _handler;
     private Runnable _r;
-    private ImageView _spinner;
-    private Handspinner _handspinnerModel;
+    private ImageView _spinnerImageView;
+    private MainActivityModel _model;
 
     private float _defaultPivotX = -1.0f;
     private float _defaultPivotY = -1.0f;
+
+    public MainActivity(){
+        super();
+        this._model = new MainActivityModel();
+        this._model.subscribeHandspinnerChanged(new Action1<Handspinner>() {
+            @Override
+            public void call(Handspinner handspinner) {
+                changeHandspinner(handspinner);
+            }
+        });
+    }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
-        if (this._defaultPivotX < 0) {
-            this._defaultPivotX = this._spinner.getPivotX();
+        if (this._defaultPivotX < 0 && this._defaultPivotY < 0) {
+            this._defaultPivotX = this._spinnerImageView.getPivotX();
+            this._defaultPivotY = this._spinnerImageView.getPivotY();
+            this._model.getReady();
         }
-        if (this._defaultPivotY < 0) {
-            this._defaultPivotY = this._spinner.getPivotY();
-        }
-
-        HandspinnerShop shop = new HandspinnerShop();
-        Handspinner spinner = shop.getSpinnerByName("ベーシックスピナー");
-        this._handspinnerModel = spinner;
-
-        this.changeSpinner(spinner);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this._spinner = (ImageView) findViewById(R.id.spinner);
+        this._spinnerImageView = (ImageView) findViewById(R.id.spinner);
 
         // 定期実行ハンドラを登録
         this._handler = new Handler();
@@ -57,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 // 少しずつ回す
                 final float delta = 1.0f;
-                _spinner.setRotation(_angle += delta);
+                _spinnerImageView.setRotation(_angle += delta);
 
                 if (_angle >= 360) {
                     _angle -= 360;
@@ -115,12 +121,12 @@ public class MainActivity extends AppCompatActivity {
         this._handler.removeCallbacks(this._r);
     }
 
-    private void changeSpinner(Handspinner spinner) {
+    private void changeHandspinner(Handspinner spinner) {
         // 回転中心が合うようにピボット位置を補正する
-        this._spinner.setPivotX(this._defaultPivotX * spinner.getMetadata().getPivotXCorrectionScale());
-        this._spinner.setPivotY(this._defaultPivotY * spinner.getMetadata().getPivotYCorrectionScale());
+        this._spinnerImageView.setPivotX(this._defaultPivotX * spinner.getMetadata().getPivotXCorrectionScale());
+        this._spinnerImageView.setPivotY(this._defaultPivotY * spinner.getMetadata().getPivotYCorrectionScale());
 
         // ハンドスピナーの画像を差し替える
-        this._spinner.setImageResource(spinner.getMetadata().getImageId());
+        this._spinnerImageView.setImageResource(spinner.getMetadata().getImageId());
     }
 }
