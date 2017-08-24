@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<layout>
+ <data>
+     <variable
+         name="vm"
+         type="com.inoueken.handspinner.viewmodels.MainActivityViewModel"/>
+ </data>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -89,4 +96,14 @@
         </com.github.clans.fab.FloatingActionMenu>
     </FrameLayout>
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:textSize="24dp"
+        android:text="@{vm.coinCount}"/>
 </RelativeLayout>
+
+</layout>

@@ -44,7 +44,7 @@ public class HandspinnerTest {
         hs.addForce(30.0f);
         hs.addRotationCountChangedEventListener(new RotationCountChangedEventListener() {
             @Override
-            public void rotationChanged(RotationCountChangedEventArgs args) {
+            public void rotationChanged(CountChangedEventArgs args) {
                 System.out.println(args.getNewCount());
                 System.out.println(hs.getAngle());
             }

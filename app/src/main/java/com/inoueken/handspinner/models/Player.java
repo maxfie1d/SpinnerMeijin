@@ -1,5 +1,6 @@
 package com.inoueken.handspinner.models;
 
+import com.inoueken.handspinner.CountChangedEventArgs;
 import com.inoueken.handspinner.Handspinner;
 
 import java.util.HashSet;
@@ -14,16 +15,20 @@ public class Player {
     private Handspinner _currentHandspinner;
     private Set<String> _handspinnerAccesses;
     private BehaviorSubject<Handspinner> _handspinnerChangedEvent;
+    private int _coinCount;
+    private BehaviorSubject<CountChangedEventArgs> _coinCountChangedEvent;
 
     public Player() {
         this._handspinnerAccesses = new HashSet<>();
         this._handspinnerAccesses.add("basic_spinner");
 
         this._handspinnerChangedEvent = BehaviorSubject.create();
+        this._coinCountChangedEvent = BehaviorSubject.create();
+        this._coinCount = 0;
     }
 
     public int getCoinCount() {
-        return 1000;
+        return this._coinCount;
     }
 
     public boolean canHaveAccessToHandspinner(String handspinnerId) {
@@ -31,7 +36,7 @@ public class Player {
     }
 
     public Handspinner getCurrentHandspinner() {
-        return null;
+        return this._currentHandspinner;
     }
 
     public void changeHandspinner(String handspinnerId, HandspinnerShop shop) {
@@ -47,5 +52,15 @@ public class Player {
 
     public Subscription subscribeHandspinnerChanged(Action1<Handspinner> action) {
         return this._handspinnerChangedEvent.subscribe(action);
+    }
+
+    public Subscription subscribeCoinCountChanged(Action1<CountChangedEventArgs> action){
+        return this._coinCountChangedEvent.subscribe(action);
+    }
+
+    public void earnCoins(int coinCount) {
+        final int oldCoinCount = this._coinCount;
+        this._coinCount += coinCount;
+        this._coinCountChangedEvent.onNext(new CountChangedEventArgs(oldCoinCount, this._coinCount));
     }
 }

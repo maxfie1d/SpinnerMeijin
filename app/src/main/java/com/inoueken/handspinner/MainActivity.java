@@ -1,17 +1,20 @@
 package com.inoueken.handspinner;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.inoueken.handspinner.databinding.ActivityMainBinding;
 import com.inoueken.handspinner.models.MainActivityModel;
+import com.inoueken.handspinner.viewmodels.MainActivityViewModel;
 
 import rx.functions.Action1;
 
@@ -21,11 +24,12 @@ public class MainActivity extends AppCompatActivity {
     private Runnable _r;
     private ImageView _spinnerImageView;
     private MainActivityModel _model;
+    private MainActivityViewModel _vm;
 
     private float _defaultPivotX = -1.0f;
     private float _defaultPivotY = -1.0f;
 
-    public MainActivity(){
+    public MainActivity() {
         super();
         this._model = new MainActivityModel();
         this._model.subscribeHandspinnerChanged(new Action1<Handspinner>() {
@@ -34,6 +38,24 @@ public class MainActivity extends AppCompatActivity {
                 changeHandspinner(handspinner);
             }
         });
+
+        this._model.subscribeRotationAngleChanged(new Action1<Float>() {
+            @Override
+            public void call(Float angle) {
+                _spinnerImageView.setRotation(angle);
+            }
+        });
+
+        this._model.subscribeCoinCountChanged(new Action1<CountChangedEventArgs>() {
+            @Override
+            public void call(CountChangedEventArgs countChangedEventArgs) {
+                final int newCoinCount = countChangedEventArgs.getNewCount();
+                // Viewにコインの数を反映する
+                _vm.setCoinCount(newCoinCount);
+            }
+        });
+
+        this._vm = new MainActivityViewModel();
     }
 
     @Override
@@ -51,28 +73,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // ViewModelをバインディングする
+        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding.setVm(this._vm);
+
         this._spinnerImageView = (ImageView) findViewById(R.id.spinner);
-
-        // 定期実行ハンドラを登録
-        this._handler = new Handler();
-        this._r = new Runnable() {
-            private float _angle = 0;
-            private static final long DelayMills = 4;
-
-            @Override
-            public void run() {
-                // 少しずつ回す
-                final float delta = 1.0f;
-                _spinnerImageView.setRotation(_angle += delta);
-
-                if (_angle >= 360) {
-                    _angle -= 360;
-                }
-                _handler.postDelayed(this, DelayMills);
-            }
-        };
-
-        this._handler.post(this._r);
 
         final FloatingActionMenu actionMenu = (FloatingActionMenu) findViewById(R.id.action_menu);
         final FloatingActionButton btnShowCredits = (FloatingActionButton) findViewById(R.id.btn_show_credits);
