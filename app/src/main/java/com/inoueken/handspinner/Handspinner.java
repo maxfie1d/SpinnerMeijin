@@ -2,8 +2,8 @@ package com.inoueken.handspinner;
 
 import com.inoueken.handspinner.models.HandspinnerMetadata;
 
-import java.util.*;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import rx.Subscription;
 import rx.functions.Action1;
@@ -19,8 +19,6 @@ public class Handspinner {
     private float mass;
     private BehaviorSubject<Float> _rotationAngleChangedEvent;
 
-    // TODO: 回転数の変化のイベントはRxに置き換えるためリスナーパターンは削除予定
-    private ArrayList<RotationCountChangedEventListener> _listeners;
     private HandspinnerMetadata _metadata;
     private BehaviorSubject<CountChangedEventArgs> _rotationCountChangedEvent;
 
@@ -32,13 +30,12 @@ public class Handspinner {
         this.rotationTaskInterval = 1;
         this.t = new Timer();
         this.mass = 1;
-        this._listeners = new ArrayList<>();
         this._metadata = metadata;
         this._rotationCountChangedEvent = BehaviorSubject.create();
         this._rotationAngleChangedEvent = BehaviorSubject.create();
     }
 
-    public Handspinner(){
+    public Handspinner() {
         this(null);
     }
 
@@ -74,9 +71,6 @@ public class Handspinner {
             _rotationAngleChangedEvent.onNext(angle);
 
             if (rotationCountDiff > 0) {
-                for (RotationCountChangedEventListener listener : _listeners) {
-                    listener.rotationChanged(new CountChangedEventArgs(oldRotationCount, _rotationCount));
-                }
                 _rotationCountChangedEvent.onNext(new CountChangedEventArgs(oldRotationCount, _rotationCount));
             }
         }
@@ -86,19 +80,15 @@ public class Handspinner {
         t.cancel();
     }
 
-    public void addRotationCountChangedEventListener(RotationCountChangedEventListener listener) {
-        this._listeners.add(listener);
-    }
-
-    public Subscription subscribeRotationCountChanged(Action1<CountChangedEventArgs> action){
+    public Subscription subscribeRotationCountChanged(Action1<CountChangedEventArgs> action) {
         return this._rotationCountChangedEvent.subscribe(action);
     }
 
-    public Subscription subscribeRotationAngleChanged(Action1<Float> action){
+    public Subscription subscribeRotationAngleChanged(Action1<Float> action) {
         return this._rotationAngleChangedEvent.subscribe(action);
     }
 
-    public HandspinnerMetadata getMetadata(){
+    public HandspinnerMetadata getMetadata() {
         return this._metadata;
     }
 }

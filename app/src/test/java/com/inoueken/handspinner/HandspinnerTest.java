@@ -2,7 +2,7 @@ package com.inoueken.handspinner;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import rx.functions.Action1;
 
 /**
  * Created by y-fujiwr on 2017/08/17.
@@ -42,9 +42,9 @@ public class HandspinnerTest {
         final Handspinner hs = new Handspinner();
         hs.rotate();
         hs.addForce(30.0f);
-        hs.addRotationCountChangedEventListener(new RotationCountChangedEventListener() {
+        hs.subscribeRotationCountChanged(new Action1<CountChangedEventArgs>() {
             @Override
-            public void rotationChanged(CountChangedEventArgs args) {
+            public void call(CountChangedEventArgs args) {
                 System.out.println(args.getNewCount());
                 System.out.println(hs.getAngle());
             }
