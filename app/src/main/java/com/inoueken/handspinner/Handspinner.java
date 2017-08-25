@@ -38,6 +38,10 @@ public class Handspinner {
         this._rotationAngleChangedEvent = BehaviorSubject.create();
     }
 
+    public Handspinner(){
+        this(null);
+    }
+
     public float getAngle() {
         return angle;
     }
