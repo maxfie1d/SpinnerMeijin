@@ -13,18 +13,14 @@ import rx.subjects.BehaviorSubject;
 public class Player {
     // ハンドスピナーの所有権を格納する
     private Handspinner _currentHandspinner;
-    private Set<String> _handspinnerAccesses;
+    private Set<String> _handspinnerAccessRights;
     private BehaviorSubject<Handspinner> _handspinnerChangedEvent;
     private int _coinCount;
     private BehaviorSubject<CountChangedEventArgs> _coinCountChangedEvent;
 
     public Player() {
-        this._handspinnerAccesses = new HashSet<>();
-        this._handspinnerAccesses.add("basic_spinner");
-
         this._handspinnerChangedEvent = BehaviorSubject.create();
         this._coinCountChangedEvent = BehaviorSubject.create();
-        this._coinCount = 0;
     }
 
     public int getCoinCount() {
@@ -32,7 +28,7 @@ public class Player {
     }
 
     public boolean canHaveAccessToHandspinner(String handspinnerId) {
-        return this._handspinnerAccesses.contains(handspinnerId);
+        return this._handspinnerAccessRights.contains(handspinnerId);
     }
 
     public Handspinner getCurrentHandspinner() {
@@ -40,7 +36,7 @@ public class Player {
     }
 
     public void changeHandspinner(String handspinnerId, HandspinnerShop shop) {
-        if (this._handspinnerAccesses.contains(handspinnerId)) {
+        if (this._handspinnerAccessRights.contains(handspinnerId)) {
             final Handspinner spinner = shop.getSpinnerById(handspinnerId);
             this._currentHandspinner = spinner;
             this._handspinnerChangedEvent.onNext(spinner);
@@ -62,5 +58,29 @@ public class Player {
         final int oldCoinCount = this._coinCount;
         this._coinCount += coinCount;
         this._coinCountChangedEvent.onNext(new CountChangedEventArgs(oldCoinCount, this._coinCount));
+    }
+
+    public Set<String> getHandspinnerAccessRights(){
+        return this._handspinnerAccessRights;
+    }
+
+    /**
+     * プレイヤーデータを読み込む
+     */
+    public void restoreData(PlayerData playerData, HandspinnerShop shop){
+        // コインの数
+        this._coinCount = playerData.coinCount;
+
+        // ハンドスピナーの使用権
+        Set<String> accessRights = new HashSet<>();
+        if(playerData.accessRights.basic_spinner) accessRights.add("basic_spinner");
+        if(playerData.accessRights.rare_spinner) accessRights.add("rare_spinner");
+        if(playerData.accessRights.legendary_spinner) accessRights.add("regendary_spinner");
+        if(playerData.accessRights.ultra_spinner) accessRights.add("ultra_spinner");
+        if(playerData.accessRights.kakiage_spinner) accessRights.add("kakiage_spinner");
+        this._handspinnerAccessRights = accessRights;
+
+        // 選択中のハンドスピナー
+        this.changeHandspinner(playerData.currentSpinner, shop);
     }
 }

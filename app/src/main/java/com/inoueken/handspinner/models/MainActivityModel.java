@@ -31,4 +31,8 @@ public class MainActivityModel {
     public void getReady() {
         this._gameManager.start();
     }
+
+    public void onStop(){
+       this._gameManager.save();
+    }
 }

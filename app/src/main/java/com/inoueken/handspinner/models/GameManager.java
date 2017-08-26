@@ -1,6 +1,7 @@
 package com.inoueken.handspinner.models;
 
 
+import com.inoueken.handspinner.AppData;
 import com.inoueken.handspinner.CountChangedEventArgs;
 import com.inoueken.handspinner.Handspinner;
 
@@ -21,6 +22,9 @@ public class GameManager {
         this._handspinnerRotationAngleChanged = BehaviorSubject.create();
     }
 
+    /**
+     * アプリ起動時に呼び出す
+     */
     public void start() {
         this._player.subscribeHandspinnerChanged(new Action1<Handspinner>() {
             @Override
@@ -49,11 +53,19 @@ public class GameManager {
             }
         });
 
-        //
-        this._player.changeHandspinner("basic_spinner", this._shop);
+        // プレイヤーデータを読み込む
+        AppData appData = new AppData();
+        PlayerData playerData = appData.loadPlayerData();
+        this._player.restoreData(playerData, this._shop);
+
         Handspinner spinner = this._player.getCurrentHandspinner();
         spinner.rotate();
         spinner.addForce(1.0f);
+    }
+
+    public void save() {
+        AppData appData = new AppData();
+        appData.savePlayerData(this._player);
     }
 
     public Subscription subscribeHandspinnerRotationAngleChanged(Action1<Float> action) {

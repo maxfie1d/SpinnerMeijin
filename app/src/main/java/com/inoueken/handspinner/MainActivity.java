@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         this._vm = new MainActivityViewModel();
+        AppData.init(this);
     }
 
     @Override
@@ -134,5 +135,11 @@ public class MainActivity extends AppCompatActivity {
 
         // ハンドスピナーの画像を差し替える
         this._spinnerImageView.setImageResource(spinner.getMetadata().getImageId());
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        this._model.onStop();
     }
 }
