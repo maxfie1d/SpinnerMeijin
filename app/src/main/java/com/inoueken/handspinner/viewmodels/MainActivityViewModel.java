@@ -15,7 +15,7 @@ public class MainActivityViewModel extends BaseObservable {
 
 
     public MainActivityViewModel() {
-        this._coinCount = String.valueOf(0);
+        this._coinCount = "--";
     }
 
     public void setCoinCount(int coinCount) {

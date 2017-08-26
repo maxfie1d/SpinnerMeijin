@@ -70,6 +70,7 @@ public class Player {
     public void restoreData(PlayerData playerData, HandspinnerShop shop){
         // コインの数
         this._coinCount = playerData.coinCount;
+        this._coinCountChangedEvent.onNext(new CountChangedEventArgs(-1, this._coinCount));
 
         // ハンドスピナーの使用権
         Set<String> accessRights = new HashSet<>();
