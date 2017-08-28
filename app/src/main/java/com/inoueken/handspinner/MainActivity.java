@@ -178,8 +178,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     @Override
     public boolean onDown(MotionEvent e) {
         _handspinnerModel.setAngularVelocity(0f);
-        beforePositionX = 0;
-        beforePositionY = 0;
+        beforePositionX = e.getX() - centerX;
+        beforePositionY = e.getY() - centerY;
         return true;
     }
 
@@ -202,10 +202,10 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 
-        double e1X = e1.getX() - centerX ;
-        double e1Y = e1.getY() - centerY ;
-        double e2X = e2.getX() - centerX ;
-        double e2Y = e2.getY() - centerY ;
+        double e1X = e1.getX() - centerX;
+        double e1Y = e1.getY() - centerY;
+        double e2X = e2.getX() - centerX;
+        double e2Y = e2.getY() - centerY;
 
         if (beforePositionX == 0) {
             beforePositionX = e1X;
