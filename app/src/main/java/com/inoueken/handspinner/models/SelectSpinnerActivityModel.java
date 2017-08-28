@@ -26,9 +26,10 @@ public class SelectSpinnerActivityModel {
         _selectedNum = 0;
         spinnersCollection = shop.getHandspinners();
         _handspinners = (Handspinner[]) spinnersCollection.toArray(new Handspinner[spinnersCollection.size()]);
-        while (appData.get_currentSpinner() != _handspinners[_selectedNum]) _selectedNum++;
+        System.out.println(appData.get_currentSpinner().getMetadata().getDisplayName());
+        System.out.println(_handspinners[0].getMetadata().getDisplayName()+"やで");
+        while (appData.get_currentSpinner().getMetadata().getDisplayName().equals(_handspinners[_selectedNum].getMetadata().getDisplayName()) ) _selectedNum++;
         _selectedSpinner = _handspinners[_selectedNum];
-        _purchasedSpinners = appData.get_purchasedSpinners();
         _coinCount = appData.getCoinCount();
         //左端右端時のボタンの非表示化
     }

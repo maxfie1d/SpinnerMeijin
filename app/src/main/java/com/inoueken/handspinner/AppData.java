@@ -20,20 +20,27 @@ public class AppData implements Serializable{
     private int SpinnerNum;
     private static final long serialVersionUID = 1L;//データ遷移用変数（消さないで）
 
-    public AppData(HandspinnerShop shop) {
+    public AppData() {
         this.load();
     }
 
     public void load() {
-     /*
+        HandspinnerShop shop = new HandspinnerShop();
         BufferedReader br;
         String str;
+        SpinnerNum=5;
+       _currentSpinner = shop.getSpinnerByName("ベーシックスピナー");
+        _coinCount=1000;
+
+        /*
         try {
+
             File file = new File("savedata.txt");
             br = new BufferedReader(new FileReader(file));
             int i = 0;
             while ((str = br.readLine()) != null) {
                 if (str.equals("SpinnerNum")) {
+
                     SpinnerNum = Integer.parseInt(br.readLine());
                 }
                 if (str.equals("LastUsed")) {
@@ -53,6 +60,7 @@ public class AppData implements Serializable{
         }
         */
 
+
     }
 
     public void save() {
@@ -68,7 +76,7 @@ public class AppData implements Serializable{
     }
 
     public Handspinner get_currentSpinner() {
-        return this._currentSpinner;
+        return _currentSpinner;
     }
 
     public int[] get_purchasedSpinners() {

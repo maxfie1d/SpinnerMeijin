@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         this._spinner = (ImageView) findViewById(R.id.spinner);
         HandspinnerShop shop = new HandspinnerShop();
-        final AppData appData = new AppData(shop);
+        final AppData appData = new AppData();
 
         // 定期実行ハンドラを登録
         this._handler = new Handler();
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("ハンドスピナーショップに移動するやで");
                 try {
                     Intent intent = new Intent(MainActivity.this, SelectSpinnerActivity.class);
-                    intent.putExtra("data", appData);
+                   //intent.putExtra("data", appData);
                     int requestCode = 1000;
                     startActivityForResult(intent, requestCode);
                 }catch(Exception e){
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        AppData appData = (AppData)intent.getSerializableExtra("RESULT");
+       // AppData appData = (AppData)intent.getSerializableExtra("RESULT");
 
     }
 

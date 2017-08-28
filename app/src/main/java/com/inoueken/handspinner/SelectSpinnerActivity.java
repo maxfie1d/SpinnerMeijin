@@ -22,7 +22,9 @@ public class SelectSpinnerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_spinner);
         Intent intent = getIntent();
-        final AppData appData = (AppData) intent.getSerializableExtra("data");
+        //final AppData appData = (AppData) intent.getSerializableExtra("data");
+        System.out.println("break");
+        AppData appData = new AppData();
         final SelectSpinnerActivityModel ShopModel = new SelectSpinnerActivityModel(appData);
         ImageButton LeftButton = (ImageButton)findViewById(R.id.LeftButton);
         ImageButton RightButton = (ImageButton)findViewById(R.id.RightButton);
@@ -47,7 +49,7 @@ public class SelectSpinnerActivity extends AppCompatActivity {
                 try {
                     Intent intent = new Intent();
                     // keyword "RESULT" でデータを返す
-                    intent.putExtra("RESULT", appData);
+                    //intent.putExtra("RESULT", appData);
                     setResult(RESULT_OK, intent);
                     finish();
                 }catch (Exception e){
