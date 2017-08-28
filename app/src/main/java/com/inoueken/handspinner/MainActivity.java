@@ -6,8 +6,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.clans.fab.FloatingActionButton;
@@ -19,12 +27,21 @@ import com.inoueken.handspinner.viewmodels.MainActivityViewModel;
 import rx.functions.Action1;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener {
     private Handler _handler;
     private Runnable _r;
     private ImageView _spinnerImageView;
     private MainActivityModel _model;
     private MainActivityViewModel _vm;
+    private Handspinner _handspinnerModel;
+    private Display display;
+    private DisplayMetrics displayMetrics;
+    private GestureDetector ges;
+    private double beforePositionX = 0;
+    private double beforePositionY = 0;
+    private double centerX = 0;
+    private double centerY = 0;
+    private RelativeLayout r1 = null;
 
     private float _defaultPivotX = -1.0f;
     private float _defaultPivotY = -1.0f;
@@ -80,6 +97,14 @@ public class MainActivity extends AppCompatActivity {
         binding.setVm(this._vm);
 
         this._spinnerImageView = (ImageView) findViewById(R.id.spinner);
+        this.r1 = (RelativeLayout)findViewById(R.id.relativeLayout1);
+        WindowManager windowManager = getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+
+        this.displayMetrics = new DisplayMetrics();
+        display.getMetrics(this.displayMetrics);
+
+        ges = new GestureDetector(this, this);
 
         final FloatingActionMenu actionMenu = (FloatingActionMenu) findViewById(R.id.action_menu);
         final FloatingActionButton btnShowCredits = (FloatingActionButton) findViewById(R.id.btn_show_credits);
@@ -135,11 +160,91 @@ public class MainActivity extends AppCompatActivity {
 
         // ハンドスピナーの画像を差し替える
         this._spinnerImageView.setImageResource(spinner.getMetadata().getImageId());
+        this._spinnerImageView.setImageResource(spinner.getMetadata().getImageId());
+
+        // ハンドスピナーの回転軸の座標を計算しておく
+        centerX = _spinnerImageView.getLeft() + _spinnerImageView.getPivotX();
+        centerY = displayMetrics.heightPixels - r1.getHeight() + _spinnerImageView.getTop() + _spinnerImageView.getPivotY();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         this._model.onStop();
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        _handspinnerModel.setAngularVelocity(0f);
+        beforePositionX = 0;
+        beforePositionY = 0;
+        return true;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        ges.onTouchEvent(event);
+        return true;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return true;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+
+        double e1X = e1.getX() - centerX ;
+        double e1Y = e1.getY() - centerY ;
+        double e2X = e2.getX() - centerX ;
+        double e2Y = e2.getY() - centerY ;
+
+        if (beforePositionX == 0) {
+            beforePositionX = e1X;
+            beforePositionY = e1Y;
+        }
+
+        double theta = Math.atan2(beforePositionX * e2Y - beforePositionY * e2X, beforePositionX * e2X + beforePositionY * e2Y);
+
+        _handspinnerModel.setAngularVelocity(0f);
+        _handspinnerModel.addAngle((float) (theta / Math.PI * 180));
+
+        beforePositionX = e2X;
+        beforePositionY = e2Y;
+
+        return true;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        double vX = velocityX / displayMetrics.widthPixels * 25.4;
+        double vY = velocityY / displayMetrics.heightPixels * 25.4;
+        double touchX = e2.getX();
+        double touchY = e2.getY();
+        double vectorX = touchX - centerX;
+        double vectorY = touchY - centerY;
+        double distanceFromCenter = Math.sqrt(Math.pow(vectorX, 2) + Math.pow(vectorY, 2));
+        double validVelocitySize = Math.abs(vectorX * vX + vectorY * vY) / Math.sqrt(vectorX * vectorX + vectorY * vectorY);
+        double arm = distanceFromCenter + Math.sqrt(vX * vX + vY * vY - validVelocitySize * validVelocitySize);
+        double theta = Math.atan2(vectorX * vY - vectorY * vX, vectorX * vX + vectorY * vY);
+
+
+        if (theta < 0) {
+            _handspinnerModel.addForce(-(float) (validVelocitySize * arm / 50000));
+        } else if (theta != 0 && theta != Math.PI) {
+            _handspinnerModel.addForce((float) (validVelocitySize * arm / 50000));
+        }
+        return true;
     }
 }

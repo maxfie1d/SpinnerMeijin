@@ -26,7 +26,7 @@ public class Handspinner {
         this._rotationCount = 0;
         this.angle = 0;
         this.angularVelocity = 0;
-        this.registanceForce = 0;
+        this.registanceForce = 0.0001f;
         this.rotationTaskInterval = 1;
         this.t = new Timer();
         this.mass = 1;
@@ -39,12 +39,18 @@ public class Handspinner {
         this(null);
     }
 
+    public void addAngle(float amount) {
+        angle += amount;
+    }
+    public void setAngularVelocity(float value){
+        angularVelocity = value;
+    }
     public float getAngle() {
         return angle;
     }
 
     public void addForce(float amount) {
-        angularVelocity += amount; //amountはハンドスピナーに加えた力を半径1の場所に加えた場合に補正したときの大きさ
+        angularVelocity = amount; //amountはハンドスピナーに加えた力を半径1の場所に加えた場合に補正したときの大きさ
     }
 
     public int getRotationCount() {
@@ -66,7 +72,10 @@ public class Handspinner {
             int rotationCountDiff = Math.abs((int) (angle / 360f));
             _rotationCount += rotationCountDiff;
             angle -= 360f * (int) (angle / 360f);
-            angularVelocity -= registanceForce * rotationTaskInterval;
+            if (angularVelocity > 0)
+                angularVelocity = Math.max(angularVelocity - registanceForce * rotationTaskInterval, 0);
+            else if (angularVelocity < 0)
+                angularVelocity = Math.min(angularVelocity + registanceForce * rotationTaskInterval, 0);
 
             _rotationAngleChangedEvent.onNext(angle);
 
