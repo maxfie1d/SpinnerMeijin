@@ -25,6 +25,10 @@ import com.inoueken.handspinner.models.MainActivityModel;
 import com.inoueken.handspinner.viewmodels.MainActivityViewModel;
 
 import rx.functions.Action1;
+import com.inoueken.handspinner.models.HandspinnerShop;
+import com.inoueken.handspinner.models.SelectSpinnerActivityModel;
+
+import android.content.Intent;
 
 
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener {
@@ -129,6 +133,14 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             @Override
             public void onClick(View v) {
                 System.out.println("ハンドスピナーショップに移動するやで");
+                try {
+                    Intent intent = new Intent(MainActivity.this, SelectSpinnerActivity.class);
+                   //intent.putExtra("data", appData);
+                    int requestCode = 1000;
+                    startActivityForResult(intent, requestCode);
+                }catch(Exception e){
+                    System.out.println("遷移ミス");
+                }
                 actionMenu.close(true);
             }
         });
@@ -143,6 +155,11 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 actionMenu.close(true);
             }
         });
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+       // AppData appData = (AppData)intent.getSerializableExtra("RESULT");
     }
 
     @Override
