@@ -10,6 +10,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.inoueken.handspinner.models.HandspinnerShop;
+import com.inoueken.handspinner.models.SelectSpinnerActivityModel;
+
+import android.content.Intent;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -44,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this._spinner = (ImageView) findViewById(R.id.spinner);
+        HandspinnerShop shop = new HandspinnerShop();
+        final AppData appData = new AppData(shop);
 
         // 定期実行ハンドラを登録
         this._handler = new Handler();
@@ -88,9 +93,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("ハンドスピナーショップに移動するやで");
+                try {
+                    Intent intent = new Intent(MainActivity.this, SelectSpinnerActivity.class);
+                    intent.putExtra("data", appData);
+                    int requestCode = 1000;
+                    startActivityForResult(intent, requestCode);
+                }catch(Exception e){
+                    System.out.println("遷移ミス");
+                }
                 actionMenu.close(true);
             }
         });
+
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        AppData appData = (AppData)intent.getSerializableExtra("RESULT");
+
     }
 
     @Override
