@@ -76,7 +76,7 @@ public class Player {
         Set<String> accessRights = new HashSet<>();
         if(playerData.accessRights.basic_spinner) accessRights.add("basic_spinner");
         if(playerData.accessRights.rare_spinner) accessRights.add("rare_spinner");
-        if(playerData.accessRights.legendary_spinner) accessRights.add("regendary_spinner");
+        if(playerData.accessRights.legendary_spinner) accessRights.add("legendary_spinner");
         if(playerData.accessRights.ultra_spinner) accessRights.add("ultra_spinner");
         if(playerData.accessRights.kakiage_spinner) accessRights.add("kakiage_spinner");
         this._handspinnerAccessRights = accessRights;
