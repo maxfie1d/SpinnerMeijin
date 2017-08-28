@@ -154,6 +154,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     }
 
     private void changeHandspinner(Handspinner spinner) {
+        this._handspinnerModel = spinner;
+        
         // 回転中心が合うようにピボット位置を補正する
         this._spinnerImageView.setPivotX(this._defaultPivotX * spinner.getMetadata().getPivotXCorrectionScale());
         this._spinnerImageView.setPivotY(this._defaultPivotY * spinner.getMetadata().getPivotYCorrectionScale());
