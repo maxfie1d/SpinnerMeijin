@@ -1,12 +1,16 @@
 package com.inoueken.handspinner.models;
 
 import android.support.annotation.NonNull;
+import android.widget.ImageView;
 
 import com.inoueken.handspinner.AppData;
 import com.inoueken.handspinner.Handspinner;
 
 import java.util.Collection;
 import java.util.Iterator;
+
+import android.view.View;
+import android.widget.ImageView;
 
 /**
  * Created by n-isida on 2017/08/08.
@@ -26,8 +30,6 @@ public class SelectSpinnerActivityModel {
         _selectedNum = 0;
         spinnersCollection = shop.getHandspinners();
         _handspinners = (Handspinner[]) spinnersCollection.toArray(new Handspinner[spinnersCollection.size()]);
-//        System.out.println(appData.get_currentSpinner().getMetadata().getDisplayName());
-//        System.out.println(_handspinners[0].getMetadata().getDisplayName()+"やで");
 //        while (appData.get_currentSpinner().getMetadata().getDisplayName().equals(_handspinners[_selectedNum].getMetadata().getDisplayName()) ) _selectedNum++;
         _selectedSpinner = _handspinners[_selectedNum];
 //        _coinCount = appData.getCoinCount();
@@ -36,20 +38,31 @@ public class SelectSpinnerActivityModel {
 
     public void onLeftButtonPressed() {
         _selectedSpinner = _handspinners[--_selectedNum];
+        setButtonVisible();
     }
 
     public void onRightButtonPressed() {
+
         _selectedSpinner = _handspinners[++_selectedNum];
+        setButtonVisible();
+    }
+    public int setButtonVisible(){
+        if(_selectedNum==0){
+            return 1;
+        }else if(_selectedNum==4){
+            return 2;
+        }else return 0;
     }
 
-    public void onSelectButtonPressed(){
+
+    public void onSelectButtonPressed() {
         _currentSpinner = _selectedSpinner;
     }
-
+/*
     public void onBackToMainButtonPressed(){
 
     }
-
+*/
 
     public void set_selectedSpinner(Handspinner spinner) {
         _selectedSpinner = spinner;
@@ -57,18 +70,15 @@ public class SelectSpinnerActivityModel {
 
     public void onPurchaseButtonPressed() {
 
-        //現在表示されているスピナーが購入可能か？
+    }
 
-        if (this._purchasedSpinners[_selectedNum] == 1) {
-             //購入済み表示
-        } else {
-             if (_coinCount >= _selectedSpinner.getMetadata().getPrice()) {
-                _purchasedSpinners[_selectedNum] = 1;
-              } else {
-                 //購入不可
-             }
+
+    public boolean judgeAccessRight(){
+        if(true){//購入権を持っていたら
+            return true;
+        }else{
+            return false;
         }
-
 
     }
 }
