@@ -24,8 +24,8 @@ public class SelectSpinnerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_select_spinner);
         Intent intent = getIntent();
         //final AppData appData = (AppData) intent.getSerializableExtra("data");
-        AppData appData = new AppData();
-        final SelectSpinnerActivityModel ShopModel = new SelectSpinnerActivityModel(appData);
+        //AppData appData = new AppData();
+        final SelectSpinnerActivityModel ShopModel = new SelectSpinnerActivityModel();
         final ImageButton LeftButton = (ImageButton)findViewById(R.id.LeftButton);
         final ImageButton RightButton = (ImageButton)findViewById(R.id.RightButton);
         Button BackButton = (Button)findViewById(R.id.BackButton);
@@ -68,7 +68,14 @@ public class SelectSpinnerActivity extends AppCompatActivity {
         PurchaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShopModel.onPurchaseButtonPressed();
+                if(PurchaseButton.getText().equals("購入する")){
+                    ShopModel.onPurchaseButtonPressed();
+                }else{
+                    ShopModel.onSelectButtonPressed();
+                }
+                changeBelowButton(ShopModel.judgeAccessRight(),PurchaseButton);
+                changeButtonVisble(ShopModel.setButtonVisible(),LeftButton,RightButton);
+
             }
         });
 

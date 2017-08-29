@@ -18,7 +18,7 @@ public class GameManager {
 
     public GameManager() {
         this._shop = new HandspinnerShop();
-        this._player = new Player();
+        this._player = getPlayer();
         this._handspinnerRotationAngleChanged = BehaviorSubject.create();
     }
 
@@ -73,6 +73,6 @@ public class GameManager {
     }
 
     public Player getPlayer() {
-        return this._player;
+        return Player.getPlayer();
     }
 }

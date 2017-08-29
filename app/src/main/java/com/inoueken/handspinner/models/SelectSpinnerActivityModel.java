@@ -20,18 +20,19 @@ import java.util.Arrays;
 
 public class SelectSpinnerActivityModel {
     private Handspinner _selectedSpinner;//画面表示中のスピナー
-    private Handspinner _currentSpinner;//使用中のスピナー
+    // private Handspinner _currentSpinner;//使用中のスピナー
     private Handspinner[] _handspinners;
     private int[] _spinnerPrice = new int[5];
     private int[] _purchasedSpinners;
     private int _selectedNum;
     private int _coinCount;
+    private HandspinnerShop _shop;
 
-    public SelectSpinnerActivityModel(AppData appData) {
+    public SelectSpinnerActivityModel() {
         Collection<Handspinner> spinnersCollection;
-        HandspinnerShop shop = new HandspinnerShop();
+        this._shop = new HandspinnerShop();
         _selectedNum = 0;
-        spinnersCollection = shop.getHandspinners();
+        spinnersCollection = _shop.getHandspinners();
         _handspinners = (Handspinner[]) spinnersCollection.toArray(new Handspinner[spinnersCollection.size()]);
         int i = 0;
         for (Handspinner spinner : _handspinners) {
@@ -41,24 +42,29 @@ public class SelectSpinnerActivityModel {
         Arrays.sort(_spinnerPrice);
         i = 0;
         for (int spinner : _spinnerPrice) {
-            _handspinners[i] = shop.getSpinnerByPrice(spinner);
-            if(i!=4)i++;
+            _handspinners[i] = _shop.getSpinnerByPrice(spinner);
+            if (i != 4) i++;
         }
-//        while (appData.get_currentSpinner().getMetadata().getDisplayName().equals(_handspinners[_selectedNum].getMetadata().getDisplayName()) ) _selectedNum++;
-        _selectedSpinner = _handspinners[_selectedNum];
-//        _coinCount = appData.getCoinCount();
-        //左端右端時のボタンの非表示化
+        _selectedSpinner = Player.getPlayer().getCurrentHandspinner();
+        i = 0;
+        for (Handspinner spinner : _handspinners) {
+            if (spinner.getMetadata().getDisplayName().equals(_selectedSpinner.getMetadata().getDisplayName())) {
+                _selectedNum = i;
+            }
+            i++;
+        }
+        _coinCount = Player.getPlayer().getCoinCount();
     }
 
     public void onLeftButtonPressed() {
         _selectedSpinner = _handspinners[--_selectedNum];
-        setButtonVisible();
+        // setButtonVisible();
     }
 
     public void onRightButtonPressed() {
 
         _selectedSpinner = _handspinners[++_selectedNum];
-        setButtonVisible();
+        //   setButtonVisible();
     }
 
     public int setButtonVisible() {
@@ -71,7 +77,7 @@ public class SelectSpinnerActivityModel {
 
 
     public void onSelectButtonPressed() {
-        _currentSpinner = _selectedSpinner;
+        Player.getPlayer().setCurrentHandspinner(_selectedSpinner);
     }
 /*
     public void onBackToMainButtonPressed(){
@@ -83,17 +89,16 @@ public class SelectSpinnerActivityModel {
         _selectedSpinner = spinner;
     }
 
+    /**
+     * 購入ボタンを押したときの処理
+     */
     public void onPurchaseButtonPressed() {
-
+        Player.getPlayer().buyHandspinner(this._selectedSpinner.getMetadata().getId(), this._shop);
     }
 
 
     public boolean judgeAccessRight() {
-        if (true) {//購入権を持っていたら
-            return true;
-        } else {
-            return false;
-        }
+        return Player.getPlayer().canHaveAccessToHandspinner(_selectedSpinner.getMetadata().getId());
     }
 
     public Handspinner get_selectedSpinner() {
