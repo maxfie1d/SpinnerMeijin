@@ -90,6 +90,14 @@ public class HandspinnerShop {
     public Collection<Handspinner> getHandspinners() {
         return this._handspinners;
     }
+    public Handspinner getSpinnerByPrice(int spinnerPrice){
+        for (Handspinner spinner :this._handspinners) {
+            if(spinner.getMetadata().getPrice()==spinnerPrice) {
+                return spinner;
+            }
+        }
+        return null;
+    }
 
     public Handspinner getSpinnerById(String handspinnerId){
         for (Handspinner spinner :this._handspinners) {

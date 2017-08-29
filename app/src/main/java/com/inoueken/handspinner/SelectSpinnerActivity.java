@@ -37,7 +37,7 @@ public class SelectSpinnerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ShopModel.onLeftButtonPressed();
-                ((ImageView)findViewById(R.id.SpinnerImage)).setImageResource(R.drawable.rare_spinner);
+                ((ImageView)findViewById(R.id.SpinnerImage)).setImageResource(ShopModel.get_selectedSpinner().getMetadata().getImageId());
                 changeBelowButton(ShopModel.judgeAccessRight(),PurchaseButton);
                 changeButtonVisble(ShopModel.setButtonVisible(),LeftButton,RightButton);
             }
@@ -46,7 +46,7 @@ public class SelectSpinnerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ShopModel.onRightButtonPressed();
-                ((ImageView)findViewById(R.id.SpinnerImage)).setImageResource(R.drawable.legendary_spinner);
+                ((ImageView)findViewById(R.id.SpinnerImage)).setImageResource(ShopModel.get_selectedSpinner().getMetadata().getImageId());
                 changeBelowButton(ShopModel.judgeAccessRight(),PurchaseButton);
                 changeButtonVisble(ShopModel.setButtonVisible(),LeftButton,RightButton);
             }
