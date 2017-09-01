@@ -159,6 +159,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
+       // System.out.println("落ちるやで");
+        //_handspinnerModel.rotate();
        // AppData appData = (AppData)intent.getSerializableExtra("RESULT");
     }
 
@@ -184,7 +186,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         // ハンドスピナーの回転軸の座標を計算しておく
         centerX = _spinnerImageView.getLeft() + _spinnerImageView.getPivotX();
         centerY = displayMetrics.heightPixels - r1.getHeight() + _spinnerImageView.getTop() + _spinnerImageView.getPivotY();
-    }
+
+        }
 
     @Override
     protected void onStop() {

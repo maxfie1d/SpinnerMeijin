@@ -68,9 +68,9 @@ public class SelectSpinnerActivityModel {
     }
 
     public int setButtonVisible() {
-        if (_selectedNum == 0) {
+        if (_selectedSpinner.getMetadata().getDisplayName().equals("ベーシックスピナー")) {
             return 1;
-        } else if (_selectedNum == 4) {
+        } else if (_selectedSpinner.getMetadata().getDisplayName().equals("かき揚げスピナー")) {
             return 2;
         } else return 0;
     }
@@ -78,6 +78,7 @@ public class SelectSpinnerActivityModel {
 
     public void onSelectButtonPressed() {
         Player.getPlayer().setCurrentHandspinner(_selectedSpinner);
+        Player.getPlayer().changeHandspinner(_selectedSpinner.getMetadata().getId(), new HandspinnerShop() );
     }
 /*
     public void onBackToMainButtonPressed(){
@@ -103,5 +104,10 @@ public class SelectSpinnerActivityModel {
 
     public Handspinner get_selectedSpinner() {
         return _selectedSpinner;
+    }
+
+    public boolean judgeSpinnerSelected(Handspinner spinner){
+        if(spinner.getMetadata().getId().equals(_selectedSpinner.getMetadata().getId())) return false;
+        else return true;
     }
 }

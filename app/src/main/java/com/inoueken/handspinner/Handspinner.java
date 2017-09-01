@@ -85,7 +85,7 @@ public class Handspinner {
         }
     }
 
-    private void finishRotationTask() {
+    public void finishRotationTask() {
         t.cancel();
     }
 

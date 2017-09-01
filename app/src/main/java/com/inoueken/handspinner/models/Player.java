@@ -54,6 +54,13 @@ public class Player {
         this._currentHandspinner = spinner;
     }
 
+    /**
+     * メイン画面のスピナーを変更する,アクセス権がなければ例外
+     *
+     * @param handspinnerId 　ハンドスピナーのID
+     * @param shop          　ショップ
+     * @return 画像を変更する
+     */
     public void changeHandspinner(String handspinnerId, HandspinnerShop shop) {
         if (this._handspinnerAccessRights.contains(handspinnerId)) {
             final Handspinner spinner = shop.getSpinnerById(handspinnerId);
@@ -78,6 +85,11 @@ public class Player {
         this.setCoins(newCoinCount);
     }
 
+    public boolean judgeCanBuySpinner(int Price) {
+        if (player.getCoinCount() < Price) return false;
+        else return true;
+    }
+
     public void buyHandspinner(String handspinnerId, HandspinnerShop shop) {
         final Handspinner spinner = shop.getSpinnerById(handspinnerId);
         if (this.getCoinCount() < spinner.getMetadata().getPrice()) {
@@ -99,6 +111,10 @@ public class Player {
 
     public Set<String> getHandspinnerAccessRights() {
         return this._handspinnerAccessRights;
+    }
+
+    public void removeHanspinnerAccessRights(String handspinnerId) {
+        _handspinnerAccessRights.remove(handspinnerId);
     }
 
     public void giveHandspinnerAccessRights(String handspinnerId) {
