@@ -36,7 +36,7 @@ public class HandspinnerShop {
                         "レアスピナー",
                         2,
                         "普通のお店には売っていないレアなハンドスピナー。気持ちベーシックスピナーよりよく回る気がする。",
-                        1 * 1000,
+                        1 * 100,
                         1.00f,
                         1.175f,
                         "rare_spinner.png",
@@ -49,7 +49,7 @@ public class HandspinnerShop {
                         "伝説のスピナー",
                         3,
                         "世界に1つしかないハンドスピナー。岩に刺さっていたところを抜いてきた。回す人間の能力が試される。",
-                        10 * 1000,
+                        10 * 100,
                         1.00f,
                         1.215f,
                         "legendary_spinner.png",
@@ -89,6 +89,14 @@ public class HandspinnerShop {
 
     public Collection<Handspinner> getHandspinners() {
         return this._handspinners;
+    }
+    public Handspinner getSpinnerByPrice(int spinnerPrice){
+        for (Handspinner spinner :this._handspinners) {
+            if(spinner.getMetadata().getPrice()==spinnerPrice) {
+                return spinner;
+            }
+        }
+        return null;
     }
 
     public Handspinner getSpinnerById(String handspinnerId){

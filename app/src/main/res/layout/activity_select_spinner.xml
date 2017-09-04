@@ -9,7 +9,7 @@
     <ImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="90dp"
         android:src="@drawable/arrow_left"
         android:id="@+id/LeftButton"
         android:layout_alignTop="@+id/SpinnerImage"
@@ -27,19 +27,17 @@
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:src="@drawable/basic_spinner"
-        android:layout_marginTop="88dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/SpinnerImage" />
+        android:id="@+id/SpinnerImage"
+        android:layout_below="@+id/TestButton"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="150dp"
         android:layout_height="75dp"
-        android:layout_marginTop="35dp"
-        android:layout_below="@+id/SpinnerImage"
-        android:layout_centerHorizontal="true"
         android:id="@+id/PurchaseButton"
-        />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="13dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -47,6 +45,35 @@
         android:text="Back"
         android:id="@+id/BackButton"
         />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/TestButton"
+        android:text="没収"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/RightButton"
+        android:layout_marginTop="11dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/SpinnerName"
+        android:layout_below ="@+id/SpinnerImage"
+        android:layout_marginTop="0dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="30sp"
+         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail"
+        android:text = ">>詳細"
+        android:textSize="20dp"
+        android:textColor="#33B5E5"
+        android:layout_below="@+id/SpinnerName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        android:clickable="true"/>
 
 
 
