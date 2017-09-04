@@ -72,7 +72,7 @@
                     android:src="@drawable/ic_open_in_new"
                     fab:fab_colorNormal="@color/colorAccent"
                     fab:fab_colorPressed="@color/colorAccentLight"
-                    fab:fab_label="ハンドスピナーを買う"
+                    fab:fab_label="マジでハンドスピナーを買う"
                     fab:fab_size="mini" />
 
                 <com.github.clans.fab.FloatingActionButton
