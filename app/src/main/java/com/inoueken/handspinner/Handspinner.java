@@ -15,7 +15,7 @@ public class Handspinner {
     private float angularVelocity;
     private float registanceForce;
     private float rotationTaskInterval;
-    private Timer t;
+    private Timer _timer;
     private float mass;
     private BehaviorSubject<Float> _rotationAngleChangedEvent;
 
@@ -28,7 +28,6 @@ public class Handspinner {
         this.angularVelocity = 0;
         this.registanceForce = 0.0001f;
         this.rotationTaskInterval = 1;
-        this.t = new Timer();
         this.mass = 1;
         this._metadata = metadata;
         this._rotationCountChangedEvent = BehaviorSubject.create();
@@ -42,9 +41,11 @@ public class Handspinner {
     public void addAngle(float amount) {
         angle += amount;
     }
-    public void setAngularVelocity(float value){
+
+    public void setAngularVelocity(float value) {
         angularVelocity = value;
     }
+
     public float getAngle() {
         return angle;
     }
@@ -58,8 +59,15 @@ public class Handspinner {
     }
 
     public void rotate() {
-        t.schedule(new rotationTask(), 0, (long) rotationTaskInterval);
-    }
+        if (this._timer != null) {
+            // 古いタイマーがあれば念のため後始末する
+            this._timer.cancel();
+        }
+
+        final Timer timer = new Timer();
+        timer.schedule(new rotationTask(), 0, (long) rotationTaskInterval);
+        this._timer = timer;
+   }
 
     private class rotationTask extends TimerTask {
         public void run() {
@@ -86,7 +94,7 @@ public class Handspinner {
     }
 
     public void finishRotationTask() {
-        t.cancel();
+        this._timer.cancel();
     }
 
     public Subscription subscribeRotationCountChanged(Action1<CountChangedEventArgs> action) {

@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -24,7 +25,11 @@ import com.inoueken.handspinner.databinding.ActivityMainBinding;
 import com.inoueken.handspinner.models.MainActivityModel;
 import com.inoueken.handspinner.viewmodels.MainActivityViewModel;
 
+import rx.Subscription;
 import rx.functions.Action1;
+import rx.subscriptions.CompositeSubscription;
+import rx.subscriptions.Subscriptions;
+
 import com.inoueken.handspinner.models.HandspinnerShop;
 import com.inoueken.handspinner.models.SelectSpinnerActivityModel;
 
@@ -32,13 +37,9 @@ import android.content.Intent;
 
 
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener {
-    private Handler _handler;
-    private Runnable _r;
     private ImageView _spinnerImageView;
     private MainActivityModel _model;
     private MainActivityViewModel _vm;
-    private Handspinner _handspinnerModel;
-    private Display display;
     private DisplayMetrics displayMetrics;
     private GestureDetector ges;
     private double beforePositionX = 0;
@@ -46,28 +47,33 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private double centerX = 0;
     private double centerY = 0;
     private RelativeLayout r1 = null;
+    private CompositeSubscription _subscriptions;
 
     private float _defaultPivotX = -1.0f;
     private float _defaultPivotY = -1.0f;
 
-    public MainActivity() {
-        super();
-        this._model = new MainActivityModel();
-        this._model.subscribeHandspinnerChanged(new Action1<Handspinner>() {
+    private void subscribeEvents() {
+        Log.d("debug", "イベント購読を開始します");
+        final Subscription s1 = this._model.subscribeHandspinnerChanged(new Action1<Handspinner>() {
             @Override
             public void call(Handspinner handspinner) {
                 changeHandspinner(handspinner);
             }
         });
 
-        this._model.subscribeRotationAngleChanged(new Action1<Float>() {
+        final Subscription s2 = this._model.subscribeRotationAngleChanged(new Action1<Float>() {
             @Override
-            public void call(Float angle) {
-                _spinnerImageView.setRotation(angle);
+            public void call(final Float angle) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        _spinnerImageView.setRotation(angle);
+                    }
+                });
             }
         });
 
-        this._model.subscribeCoinCountChanged(new Action1<CountChangedEventArgs>() {
+        final Subscription s3 = this._model.subscribeCoinCountChanged(new Action1<CountChangedEventArgs>() {
             @Override
             public void call(CountChangedEventArgs countChangedEventArgs) {
                 final int newCoinCount = countChangedEventArgs.getNewCount();
@@ -75,6 +81,23 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 _vm.setCoinCount(newCoinCount);
             }
         });
+
+        final CompositeSubscription subscriptions = Subscriptions.from(s1, s2, s3);
+        this._subscriptions = subscriptions;
+    }
+
+    private void unsubscribeEvents() {
+        if (this._subscriptions != null) {
+            Log.d("debug", "イベント購読を解除します");
+            this._subscriptions.unsubscribe();
+        }
+    }
+
+    public MainActivity() {
+        super();
+        Log.d("debug", "MainActivityのインスタンスを作るやで");
+        this._model = new MainActivityModel();
+        this.subscribeEvents();
 
         this._vm = new MainActivityViewModel();
         AppData.init(this);
@@ -101,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         binding.setVm(this._vm);
 
         this._spinnerImageView = (ImageView) findViewById(R.id.spinner);
-        this.r1 = (RelativeLayout)findViewById(R.id.relativeLayout1);
+        this.r1 = (RelativeLayout) findViewById(R.id.relativeLayout1);
         WindowManager windowManager = getWindowManager();
         Display display = windowManager.getDefaultDisplay();
 
@@ -133,12 +156,14 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             @Override
             public void onClick(View v) {
                 System.out.println("ハンドスピナーショップに移動するやで");
+                unsubscribeEvents();
+                _model.stopSimulation();
                 try {
                     Intent intent = new Intent(MainActivity.this, SelectSpinnerActivity.class);
-                   //intent.putExtra("data", appData);
+                    //intent.putExtra("data", appData);
                     int requestCode = 1000;
                     startActivityForResult(intent, requestCode);
-                }catch(Exception e){
+                } catch (Exception e) {
                     System.out.println("遷移ミス");
                 }
                 actionMenu.close(true);
@@ -158,23 +183,20 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        Log.d("debug", "ショップから戻ってきたやで");
         super.onActivityResult(requestCode, resultCode, intent);
-       // System.out.println("落ちるやで");
-        //_handspinnerModel.rotate();
-       // AppData appData = (AppData)intent.getSerializableExtra("RESULT");
-    }
+
+        // 回転シミュレーションを再開する
+        this._model.getCurrentHandspinner().rotate();
+        this.subscribeEvents();
+  }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        // 定期実行ハンドラを削除
-        this._handler.removeCallbacks(this._r);
     }
 
     private void changeHandspinner(Handspinner spinner) {
-        this._handspinnerModel = spinner;
-        
         // 回転中心が合うようにピボット位置を補正する
         this._spinnerImageView.setPivotX(this._defaultPivotX * spinner.getMetadata().getPivotXCorrectionScale());
         this._spinnerImageView.setPivotY(this._defaultPivotY * spinner.getMetadata().getPivotYCorrectionScale());
@@ -187,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         centerX = _spinnerImageView.getLeft() + _spinnerImageView.getPivotX();
         centerY = displayMetrics.heightPixels - r1.getHeight() + _spinnerImageView.getTop() + _spinnerImageView.getPivotY();
 
-        }
+    }
 
     @Override
     protected void onStop() {
@@ -197,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     @Override
     public boolean onDown(MotionEvent e) {
-        _handspinnerModel.setAngularVelocity(0f);
+        this._model.getCurrentHandspinner().setAngularVelocity(0f);
         beforePositionX = e.getX() - centerX;
         beforePositionY = e.getY() - centerY;
         return true;
@@ -234,8 +256,10 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
         double theta = Math.atan2(beforePositionX * e2Y - beforePositionY * e2X, beforePositionX * e2X + beforePositionY * e2Y);
 
-        _handspinnerModel.setAngularVelocity(0f);
-        _handspinnerModel.addAngle((float) (theta / Math.PI * 180));
+        Handspinner s = this._model.getCurrentHandspinner();
+
+        s.setAngularVelocity(0f);
+        s.addAngle((float) (theta / Math.PI * 180));
 
         beforePositionX = e2X;
         beforePositionY = e2Y;
@@ -261,11 +285,12 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         double arm = distanceFromCenter + Math.sqrt(vX * vX + vY * vY - validVelocitySize * validVelocitySize);
         double theta = Math.atan2(vectorX * vY - vectorY * vX, vectorX * vX + vectorY * vY);
 
+        Handspinner s = this._model.getCurrentHandspinner();
 
         if (theta < 0) {
-            _handspinnerModel.addForce(-(float) (validVelocitySize * arm / 50000));
+            s.addForce(-(float) (validVelocitySize * arm / 50000));
         } else if (theta != 0 && theta != Math.PI) {
-            _handspinnerModel.addForce((float) (validVelocitySize * arm / 50000));
+            s.addForce((float) (validVelocitySize * arm / 50000));
         }
         return true;
     }

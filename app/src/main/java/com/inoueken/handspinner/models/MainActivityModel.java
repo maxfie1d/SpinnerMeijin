@@ -25,6 +25,14 @@ public class MainActivityModel {
         return this._gameManager.subscribeHandspinnerRotationAngleChanged(action);
     }
 
+    public void stopSimulation(){
+        this._gameManager.getPlayer().getCurrentHandspinner().finishRotationTask();
+    }
+
+    public Handspinner getCurrentHandspinner(){
+        return this._gameManager.getPlayer().getCurrentHandspinner();
+    }
+
     /**
      * View側の準備ができたら呼び出す
      */

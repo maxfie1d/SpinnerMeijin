@@ -64,6 +64,7 @@ public class Player {
     public void changeHandspinner(String handspinnerId, HandspinnerShop shop) {
         if (this._handspinnerAccessRights.contains(handspinnerId)) {
             final Handspinner spinner = shop.getSpinnerById(handspinnerId);
+            spinner.rotate();
             this._currentHandspinner = spinner;
             this._handspinnerChangedEvent.onNext(spinner);
         } else {

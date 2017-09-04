@@ -59,7 +59,6 @@ public class GameManager {
         this._player.restoreData(playerData, this._shop);
 
         Handspinner spinner = this._player.getCurrentHandspinner();
-        spinner.rotate();
         spinner.addForce(1.0f);
     }
 
