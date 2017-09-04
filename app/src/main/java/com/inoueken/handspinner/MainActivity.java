@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         // 回転シミュレーションを再開する
         this._model.getCurrentHandspinner().rotate();
         this.subscribeEvents();
-  }
+    }
 
     @Override
     protected void onDestroy() {
@@ -288,9 +288,9 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         Handspinner s = this._model.getCurrentHandspinner();
 
         if (theta < 0) {
-            s.addForce(-(float) (validVelocitySize * arm / 50000));
+            s.addForce(-(float) (validVelocitySize * arm / (170000 - 20000 * s.getMetadata().getSpeed())));
         } else if (theta != 0 && theta != Math.PI) {
-            s.addForce((float) (validVelocitySize * arm / 50000));
+            s.addForce((float) (validVelocitySize * arm / (170000 - 20000 * s.getMetadata().getSpeed())));
         }
         return true;
     }
