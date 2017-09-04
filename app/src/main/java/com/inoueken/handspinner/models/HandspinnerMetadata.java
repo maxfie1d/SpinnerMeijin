@@ -45,22 +45,42 @@ public class HandspinnerMetadata {
         this._imageId = imageId;
     }
 
-    public String getId(){
+    public String getId() {
         return this._id;
     }
 
+    /**
+     * 表示名を返します
+     *
+     * @return 表示名
+     */
     public String getDisplayName() {
         return this._displayName;
     }
 
+    /**
+     * すばやさを返します
+     *
+     * @return すばやさ
+     */
     public int getSpeed() {
         return this._speed;
     }
 
+    /**
+     * 説明文を返します
+     *
+     * @return 説明文
+     */
     public String getDescription() {
         return this._description;
     }
 
+    /**
+     * ねだんを返します
+     *
+     * @return ねだん
+     */
     public int getPrice() {
         return this._price;
     }
