@@ -286,11 +286,12 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         double theta = Math.atan2(vectorX * vY - vectorY * vX, vectorX * vX + vectorY * vY);
 
         Handspinner s = this._model.getCurrentHandspinner();
+        double speed = s.getMetadata().getSpeed();
 
         if (theta < 0) {
-            s.addForce(-(float) (validVelocitySize * arm / (170000 - 20000 * s.getMetadata().getSpeed())));
+            s.addForce(-(float) (validVelocitySize * arm / (220000 - 50000 * speed)));
         } else if (theta != 0 && theta != Math.PI) {
-            s.addForce((float) (validVelocitySize * arm / (170000 - 20000 * s.getMetadata().getSpeed())));
+            s.addForce((float) (validVelocitySize * arm / (220000 - 50000 * speed)));
         }
         return true;
     }
