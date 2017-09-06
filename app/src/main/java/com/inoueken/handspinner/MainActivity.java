@@ -287,11 +287,16 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         Handspinner s = this._model.getCurrentHandspinner();
         double speed = s.getMetadata().getSpeed();
 
+
         if (theta < 0) {
-            s.addForce(-(float) (validVelocitySize * arm / (220000 - 50000 * speed)));
+            s.addForce(-(float) (validVelocitySize * arm / (220000 - 50000 * calSpeedRate(speed))));
         } else if (theta != 0 && theta != Math.PI) {
-            s.addForce((float) (validVelocitySize * arm / (220000 - 50000 * speed)));
+            s.addForce((float) (validVelocitySize * arm / (220000 - 50000 * calSpeedRate(speed))));
         }
         return true;
+    }
+
+    private double calSpeedRate(double speed) {
+        return 2 * Math.log((Math.E - 1) * (speed - 1) / 3 + 1) + 1;
     }
 }
