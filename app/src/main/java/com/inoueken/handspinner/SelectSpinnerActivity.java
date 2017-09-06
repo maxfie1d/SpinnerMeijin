@@ -114,10 +114,10 @@ public class SelectSpinnerActivity extends AppCompatActivity {
         }
         if (metadata.getDisplayName().equals("ベーシックスピナー")) {
             SubscribeDialog.setMessage(metadata.getDescription() + "\n" + "価格：無料"
-                    + "\n速さ：" + sb);
+                    + "\n速さ：" + sb+"\n生産性："+metadata.getProductivity());
         } else {
             SubscribeDialog.setMessage(metadata.getDescription() + "\n" + "価格：$" +
-                    FormatPrice.format(metadata.getPrice()) + "\n" + "速さ：" + sb);
+                    FormatPrice.format(metadata.getPrice()) + "\n" + "速さ：" + sb+"\n生産性："+metadata.getProductivity());
         }
         SubscribeDialog.show();
     }
