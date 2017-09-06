@@ -17,19 +17,19 @@ public class MainActivityModel {
         return this._gameManager.getPlayer().subscribeHandspinnerChanged(action);
     }
 
-    public Subscription subscribeCoinCountChanged(Action1<CountChangedEventArgs> action){
+    public Subscription subscribeCoinCountChanged(Action1<CountChangedEventArgs> action) {
         return this._gameManager.getPlayer().subscribeCoinCountChanged(action);
     }
 
-    public Subscription subscribeRotationAngleChanged(Action1<Float> action){
+    public Subscription subscribeRotationAngleChanged(Action1<Float> action) {
         return this._gameManager.subscribeHandspinnerRotationAngleChanged(action);
     }
 
-    public void stopSimulation(){
+    public void stopSimulation() {
         this._gameManager.getPlayer().getCurrentHandspinner().finishRotationTask();
     }
 
-    public Handspinner getCurrentHandspinner(){
+    public Handspinner getCurrentHandspinner() {
         return this._gameManager.getPlayer().getCurrentHandspinner();
     }
 
@@ -40,7 +40,7 @@ public class MainActivityModel {
         this._gameManager.start();
     }
 
-    public void onStop(){
-       this._gameManager.save();
+    public void onStop() {
+        this._gameManager.save();
     }
 }

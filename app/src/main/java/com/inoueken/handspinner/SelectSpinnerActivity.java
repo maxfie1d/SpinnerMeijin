@@ -6,35 +6,30 @@ import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.app.Activity;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.inoueken.handspinner.models.HandspinnerMetadata;
-import com.inoueken.handspinner.models.HandspinnerShop;
 import com.inoueken.handspinner.models.Player;
 import com.inoueken.handspinner.models.SelectSpinnerActivityModel;
 
 import java.text.NumberFormat;
 
 public class SelectSpinnerActivity extends AppCompatActivity {
+    private SelectSpinnerActivityModel ShopModel;
+
+    public SelectSpinnerActivity(){
+        this.ShopModel = new SelectSpinnerActivityModel();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_spinner);
         Intent intent = getIntent();
-        final SelectSpinnerActivityModel ShopModel = new SelectSpinnerActivityModel();
 
 
         final ImageButton LeftButton = (ImageButton) findViewById(R.id.LeftButton);
@@ -132,6 +127,7 @@ public class SelectSpinnerActivity extends AppCompatActivity {
         AlertDialog.Builder BuyDialog = new AlertDialog.Builder(this);
         BuyDialog.setTitle("購入しますか？");
         BuyDialog.setMessage("購入後の所持コイン：$" + (Player.getPlayer().getCoinCount() - metadata.getPrice()));
+
         BuyDialog.setPositiveButton("いいえ", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // ボタンをクリックしたときの動作
@@ -218,4 +214,9 @@ public class SelectSpinnerActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        this.ShopModel.onStop();
+    }
 }
