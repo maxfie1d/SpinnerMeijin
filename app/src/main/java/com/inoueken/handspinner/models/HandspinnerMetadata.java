@@ -24,6 +24,9 @@ public class HandspinnerMetadata {
     private String _imagePath;
     private int _imageId;
 
+    // 生産性
+    private int _productivity;
+
     public HandspinnerMetadata(
             String id,
             String displayName,
@@ -33,7 +36,8 @@ public class HandspinnerMetadata {
             float pivotXCorrectionScale,
             float pivotYCorrectionScale,
             String imagePath,
-            int imageId) {
+            int imageId,
+            int productivity) {
         this._id = id;
         this._displayName = displayName;
         this._speed = speed;
@@ -43,6 +47,7 @@ public class HandspinnerMetadata {
         this._pivotYCorrectionScale = pivotYCorrectionScale;
         this._imagePath = imagePath;
         this._imageId = imageId;
+        this._productivity = productivity;
     }
 
     public String getId() {
@@ -99,5 +104,9 @@ public class HandspinnerMetadata {
 
     public int getImageId() {
         return this._imageId;
+    }
+
+    public int getProductivity() {
+        return this._productivity;
     }
 }
