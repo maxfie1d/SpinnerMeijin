@@ -81,6 +81,9 @@ public class SelectSpinnerActivityModel {
      */
     public void onPurchaseButtonPressed() {
         Player.getPlayer().buyHandspinner(this._selectedSpinner.getMetadata().getId(), this._shop);
+
+        // 設定を保存する
+        this.saveData();
     }
 
     public boolean judgeAccessRight() {
@@ -93,5 +96,9 @@ public class SelectSpinnerActivityModel {
 
     public boolean judgeSpinnerSelected(Handspinner spinner) {
         return !spinner.getMetadata().getId().equals(_selectedSpinner.getMetadata().getId());
+    }
+
+    public void onStop(){
+        this.saveData();
     }
 }
