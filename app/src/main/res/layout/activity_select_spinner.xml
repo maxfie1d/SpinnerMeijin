@@ -7,76 +7,104 @@
     tools:context="com.inoueken.handspinner.SelectSpinnerActivity">
 
     <ImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="90dp"
-        android:src="@drawable/arrow_left"
         android:id="@+id/LeftButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@null"
+        android:scaleType="centerCrop"
         android:layout_alignTop="@+id/SpinnerImage"
-        android:layout_toStartOf="@+id/SpinnerImage" />
+        android:layout_marginTop="90dp"
+        android:layout_toStartOf="@+id/SpinnerImage"
+        android:src="@drawable/left_arrow2" />
 
     <ImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/right_arrow"
-        android:id = "@+id/RightButton"
+        android:id="@+id/RightButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@null"
+        android:scaleType="centerCrop"
         android:layout_alignTop="@+id/LeftButton"
-        android:layout_toEndOf="@+id/SpinnerImage" />
+        android:layout_toEndOf="@+id/SpinnerImage"
+        android:src="@drawable/right_arrow2" />
 
     <ImageView
+        android:id="@+id/SpinnerImage"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        android:src="@drawable/basic_spinner"
-        android:id="@+id/SpinnerImage"
         android:layout_below="@+id/TestButton"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/basic_spinner" />
 
     <Button
+        android:id="@+id/PurchaseButton"
         android:layout_width="150dp"
         android:layout_height="75dp"
-        android:id="@+id/PurchaseButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="13dp" />
+        android:layout_marginBottom="13dp"
+        android:textSize="30dp" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Back"
         android:id="@+id/BackButton"
-        />
-    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="もどる" />
+
+    <Button
         android:id="@+id/TestButton"
-        android:text="没収"
-        android:layout_alignParentTop="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/RightButton"
-        android:layout_marginTop="11dp" />
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="11dp"
+        android:text="没収" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/SpinnerName"
-        android:layout_below ="@+id/SpinnerImage"
-        android:layout_marginTop="0dp"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/SpinnerImage"
         android:layout_centerHorizontal="true"
-        android:textSize="30sp"
-         />
+        android:layout_marginTop="0dp"
+        android:gravity="center_horizontal"
+        android:textSize="30dp" />
+
     <TextView
+        android:id="@+id/SpinnerPirice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/detail"
-        android:text = ">>詳細"
-        android:textSize="20dp"
-        android:textColor="#33B5E5"
         android:layout_below="@+id/SpinnerName"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="0dp"
-        android:clickable="true"/>
+        android:textSize="20dp" />
 
+    <TextView
+        android:id="@+id/detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/SpinnerPirice"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/SpinnerPirice"
+        android:clickable="true"
+        android:text=">>くわしく"
+        android:textColor="#33B5E5"
+        android:textSize="20dp" />
 
+    <ImageView
+        android:id="@+id/CoinIcon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="coin_icon"
+        android:src="@drawable/ic_monetization_on"
+        android:tint="#FFC107" />
 
+    <TextView
+        android:id = "@+id/CoinCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/TestButton"
+        android:layout_toEndOf="@+id/CoinIcon"
+        android:textSize="24dp" />
 
 
 </RelativeLayout>

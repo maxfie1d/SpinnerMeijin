@@ -2,6 +2,7 @@ package com.inoueken.handspinner;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import com.inoueken.handspinner.models.HandspinnerMetadata;
 import com.inoueken.handspinner.models.HandspinnerShop;
 import com.inoueken.handspinner.models.Player;
 import com.inoueken.handspinner.models.SelectSpinnerActivityModel;
+
+import java.text.NumberFormat;
 
 public class SelectSpinnerActivity extends AppCompatActivity {
 
@@ -100,7 +103,7 @@ public class SelectSpinnerActivity extends AppCompatActivity {
         PurchaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (PurchaseButton.getText().equals("購入する")) {
+                if (PurchaseButton.getText().equals("げっと")) {
                     createBuyDialog(ShopModel.get_selectedSpinner().getMetadata(), ShopModel
                             , PurchaseButton, LeftButton, RightButton, SpinnerName);
                 } else {
@@ -117,9 +120,16 @@ public class SelectSpinnerActivity extends AppCompatActivity {
 
     public void createSubscribeDialog(HandspinnerMetadata metadata) {
         AlertDialog.Builder SubscribeDialog = new AlertDialog.Builder(this);
+        NumberFormat FormatPrice = NumberFormat.getInstance();
         SubscribeDialog.setTitle(metadata.getDisplayName());
+        StringBuilder sb = new StringBuilder();
+        int s = metadata.getSpeed();
+        for(int i=0;i<s;i++){
+            sb.append("☆");
+        }
         SubscribeDialog.setMessage(metadata.getDescription() + "\n" + "価格：" +
-                metadata.getPrice() + "\n" + "速さ：" + metadata.getSpeed());
+                FormatPrice.format(metadata.getPrice()) + "\n" + "速さ：" + sb);
+
         SubscribeDialog.show();
     }
 
@@ -145,19 +155,26 @@ public class SelectSpinnerActivity extends AppCompatActivity {
 
     public void changeDisplay(int flag, boolean possession, Button button, ImageButton left, ImageButton right,
                               SelectSpinnerActivityModel shop, TextView name) {
+        final TextView  PriceView = (TextView)findViewById(R.id.SpinnerPirice);
+        final TextView CoinView = (TextView)findViewById(R.id.CoinCount);
+        NumberFormat FormatPrice = NumberFormat.getInstance();
         changeBelowButton(possession, button, shop);
         changeButtonVisble(flag, left, right);
         name.setText(shop.get_selectedSpinner().getMetadata().getDisplayName());
+        PriceView.setText("＄"+FormatPrice.format(shop.get_selectedSpinner().getMetadata().getPrice()));
+        CoinView.setText(String.valueOf(Player.getPlayer().getCoinCount()));
     }
 
     public void changeBelowButton(boolean right, Button button, SelectSpinnerActivityModel shop) {
         if (right) {
             //選択ボタンを表示する
-            button.setText("選択する");
+            button.setText("つかう");
+            button.setBackgroundColor(Color.rgb(255,165,0));
             button.setEnabled(shop.judgeSpinnerSelected(Player.getPlayer().getCurrentHandspinner()));
         } else {
             //購入ボタンを表示する
-            button.setText("購入する");
+            button.setText("げっと");
+            button.setBackgroundColor(Color.rgb(173,255,47));
             button.setEnabled(Player.getPlayer().judgeCanBuySpinner(shop.get_selectedSpinner().getMetadata().getPrice()));
         }
     }
