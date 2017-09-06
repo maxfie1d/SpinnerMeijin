@@ -27,7 +27,8 @@ public class HandspinnerShop {
                         1.00f,
                         1.175f,
                         "basic_spinner.png",
-                        R.drawable.basic_spinner));
+                        R.drawable.basic_spinner,
+                        1));
 
         // レアスピナー
         Handspinner rareSpinner = new Handspinner(
@@ -40,7 +41,8 @@ public class HandspinnerShop {
                         1.00f,
                         1.175f,
                         "rare_spinner.png",
-                        R.drawable.rare_spinner));
+                        R.drawable.rare_spinner,
+                        10));
 
         // 伝説のスピナー
         Handspinner legendarySpinner = new Handspinner(
@@ -49,11 +51,12 @@ public class HandspinnerShop {
                         "伝説のスピナー",
                         3,
                         "世界に1つしかないハンドスピナー。岩に刺さっていたところを抜いてきた。回す人間の能力が試される。",
-                        10 * 100,
+                        5 * 100,
                         1.00f,
                         1.215f,
                         "legendary_spinner.png",
-                        R.drawable.legendary_spinner));
+                        R.drawable.legendary_spinner,
+                        250));
 
         // ウルトラスーパーハイスペックスピナー(長いのでウルトラスピナーと省略)
         Handspinner ultraSpinner = new Handspinner(
@@ -62,11 +65,14 @@ public class HandspinnerShop {
                         "ウルトラスーパーハイスペックスピナー",
                         4,
                         "どこか宇宙を感じる壮大なスピナー。このスピナーが止まっているところを見た者はいない。",
-                        10*1000,
+
+                        25 * 100,
+
                         1.041f,
                         1.242f,
                         "ultra_spinner.png",
-                        R.drawable.ultra_spinner));
+                        R.drawable.ultra_spinner,
+                        1000));
 
         // かき揚げスピナー
         Handspinner kakiageSpinner = new Handspinner(
@@ -75,11 +81,12 @@ public class HandspinnerShop {
                         "かき揚げスピナー",
                         0,
                         "何の変哲もない普通のハンドスピナー。ついにかき揚げがハンドスピナーになった。全体的に油まみれでベトベト。もうマジむり。。",
-                        1 * 1000 * 1000,
+                        10 * 1000,
                         1.00f,
                         1.00f,
                         "kakiage_spinner.png",
-                        R.drawable.kakiage_spinner));
+                        R.drawable.kakiage_spinner,
+                        1));
 
         final Handspinner[] handspinners = {basicSpinner, rareSpinner, legendarySpinner, ultraSpinner, kakiageSpinner};
         for (Handspinner handspinner : handspinners) {
