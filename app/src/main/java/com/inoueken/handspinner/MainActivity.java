@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     @Override
     public boolean onDown(MotionEvent e) {
-        this._model.getCurrentHandspinner().setAngularVelocity(0f);
+        this._model.getCurrentHandspinner().setAngularVelocity((float) Math.max(0, this._model.getCurrentHandspinner().getAngularVelocity() - 0.7f));
         beforePositionX = e.getX() - centerX;
         beforePositionY = e.getY() - centerY;
         return true;
@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     @Override
     public void onShowPress(MotionEvent e) {
-
+        this._model.getCurrentHandspinner().setAngularVelocity(0f);
     }
 
     @Override
@@ -269,7 +269,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     @Override
     public void onLongPress(MotionEvent e) {
-
     }
 
     @Override
