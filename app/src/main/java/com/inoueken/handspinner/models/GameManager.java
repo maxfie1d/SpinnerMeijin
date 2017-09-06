@@ -62,6 +62,9 @@ public class GameManager {
         spinner.addForce(1.0f);
     }
 
+    /**
+     * アプリデータを保存する
+     */
     public void save() {
         AppData appData = new AppData();
         appData.savePlayerData(this._player);
