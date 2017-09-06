@@ -36,10 +36,7 @@ public class SelectSpinnerActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final SelectSpinnerActivityModel ShopModel = new SelectSpinnerActivityModel();
 
-        /*
-        テスト用ボタン
-         */
-        final Button TestButton = (Button) findViewById(R.id.TestButton);
+
         final ImageButton LeftButton = (ImageButton) findViewById(R.id.LeftButton);
         final ImageButton RightButton = (ImageButton) findViewById(R.id.RightButton);
         Button BackButton = (Button) findViewById(R.id.BackButton);
@@ -50,16 +47,6 @@ public class SelectSpinnerActivity extends AppCompatActivity {
                 LeftButton, RightButton, ShopModel, SpinnerName);
         ((ImageView) findViewById(R.id.SpinnerImage)).setImageResource(ShopModel.get_selectedSpinner().getMetadata().getImageId());
 
-
-        /*
-        テスト用ボタン
-         */
-        TestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Player.getPlayer().removeHanspinnerAccessRights(ShopModel.get_selectedSpinner().getMetadata().getId());
-            }
-        });
 
         DetailView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,7 +90,7 @@ public class SelectSpinnerActivity extends AppCompatActivity {
         PurchaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (PurchaseButton.getText().equals("げっと")) {
+                if (PurchaseButton.getText().equals("ゲット")) {
                     createBuyDialog(ShopModel.get_selectedSpinner().getMetadata(), ShopModel
                             , PurchaseButton, LeftButton, RightButton, SpinnerName);
                 } else {
@@ -124,12 +111,19 @@ public class SelectSpinnerActivity extends AppCompatActivity {
         SubscribeDialog.setTitle(metadata.getDisplayName());
         StringBuilder sb = new StringBuilder();
         int s = metadata.getSpeed();
-        for(int i=0;i<s;i++){
+        for (int i = 0; i < s; i++) {
+            sb.append("★");
+        }
+        for (int i = 5 - s; i > 0; i--) {
             sb.append("☆");
         }
-        SubscribeDialog.setMessage(metadata.getDescription() + "\n" + "価格：" +
-                FormatPrice.format(metadata.getPrice()) + "\n" + "速さ：" + sb);
-
+        if (metadata.getDisplayName().equals("ベーシックスピナー")) {
+            SubscribeDialog.setMessage(metadata.getDescription() + "\n" + "価格：無料"
+                    + "\n速さ：" + sb);
+        } else {
+            SubscribeDialog.setMessage(metadata.getDescription() + "\n" + "価格：$" +
+                    FormatPrice.format(metadata.getPrice()) + "\n" + "速さ：" + sb);
+        }
         SubscribeDialog.show();
     }
 
@@ -137,44 +131,75 @@ public class SelectSpinnerActivity extends AppCompatActivity {
             , final Button button, final ImageButton left, final ImageButton right, final TextView SpinnerName) {
         AlertDialog.Builder BuyDialog = new AlertDialog.Builder(this);
         BuyDialog.setTitle("購入しますか？");
-        BuyDialog.setMessage("購入後の所持コイン：" + (Player.getPlayer().getCoinCount() - metadata.getPrice()));
-        BuyDialog.setPositiveButton("No", new DialogInterface.OnClickListener() {
+        BuyDialog.setMessage("購入後の所持コイン：$" + (Player.getPlayer().getCoinCount() - metadata.getPrice()));
+        BuyDialog.setPositiveButton("いいえ", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // ボタンをクリックしたときの動作
             }
         });
-        BuyDialog.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+        BuyDialog.setNegativeButton("はい", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 ShopModel.onPurchaseButtonPressed();
                 changeDisplay(ShopModel.setButtonVisible(), ShopModel.judgeAccessRight(), button,
                         left, right, ShopModel, SpinnerName);
+                createSelectDialog(ShopModel.get_selectedSpinner().getMetadata(), ShopModel
+                        , button, left, right, SpinnerName);
+
             }
         });
         BuyDialog.show();
     }
 
+    public void createSelectDialog(HandspinnerMetadata metadata, final SelectSpinnerActivityModel ShopModel
+            , final Button button, final ImageButton left, final ImageButton right, final TextView SpinnerName) {
+        AlertDialog.Builder SelectDialog = new AlertDialog.Builder(this);
+        SelectDialog.setTitle("このスピナーを使用しますか？");
+        SelectDialog.setPositiveButton("いいえ", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // ボタンをクリックしたときの動作
+            }
+        });
+        SelectDialog.setNegativeButton("はい", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ShopModel.onSelectButtonPressed();
+                changeDisplay(ShopModel.setButtonVisible(), ShopModel.judgeAccessRight(), button,
+                        left, right, ShopModel, SpinnerName);
+
+            }
+        });
+        SelectDialog.show();
+    }
+
     public void changeDisplay(int flag, boolean possession, Button button, ImageButton left, ImageButton right,
                               SelectSpinnerActivityModel shop, TextView name) {
-        final TextView  PriceView = (TextView)findViewById(R.id.SpinnerPirice);
-        final TextView CoinView = (TextView)findViewById(R.id.CoinCount);
+        final TextView PriceView = (TextView) findViewById(R.id.SpinnerPirice);
+        final TextView CoinView = (TextView) findViewById(R.id.CoinCount);
         NumberFormat FormatPrice = NumberFormat.getInstance();
         changeBelowButton(possession, button, shop);
         changeButtonVisble(flag, left, right);
         name.setText(shop.get_selectedSpinner().getMetadata().getDisplayName());
-        PriceView.setText("＄"+FormatPrice.format(shop.get_selectedSpinner().getMetadata().getPrice()));
+        if (shop.get_selectedSpinner().getMetadata().getDisplayName().equals("ベーシックスピナー")) {
+            PriceView.setText("無料");
+        } else {
+            PriceView.setText("＄" + FormatPrice.format(shop.get_selectedSpinner().getMetadata().getPrice()));
+        }
         CoinView.setText(String.valueOf(Player.getPlayer().getCoinCount()));
     }
 
+    /**
+     * ボタンのテキストを変更した際は購入ボタンが押された時の処理を変更すること
+     */
     public void changeBelowButton(boolean right, Button button, SelectSpinnerActivityModel shop) {
         if (right) {
             //選択ボタンを表示する
             button.setText("つかう");
-            button.setBackgroundColor(Color.rgb(255,165,0));
+            button.setBackgroundColor(Color.rgb(83, 109, 254));
             button.setEnabled(shop.judgeSpinnerSelected(Player.getPlayer().getCurrentHandspinner()));
         } else {
             //購入ボタンを表示する
-            button.setText("げっと");
-            button.setBackgroundColor(Color.rgb(173,255,47));
+            button.setText("ゲット");
+            button.setBackgroundColor(Color.rgb(0, 230, 118));
             button.setEnabled(Player.getPlayer().judgeCanBuySpinner(shop.get_selectedSpinner().getMetadata().getPrice()));
         }
     }

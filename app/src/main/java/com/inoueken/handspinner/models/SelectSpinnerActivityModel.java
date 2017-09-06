@@ -80,11 +80,6 @@ public class SelectSpinnerActivityModel {
         Player.getPlayer().setCurrentHandspinner(_selectedSpinner);
         Player.getPlayer().changeHandspinner(_selectedSpinner.getMetadata().getId(), new HandspinnerShop() );
     }
-/*
-    public void onBackToMainButtonPressed(){
-
-    }
-*/
 
     public void set_selectedSpinner(Handspinner spinner) {
         _selectedSpinner = spinner;
