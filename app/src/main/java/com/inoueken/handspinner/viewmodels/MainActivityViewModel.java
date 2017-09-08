@@ -5,6 +5,8 @@ import android.databinding.Bindable;
 
 import com.inoueken.handspinner.BR;
 
+import java.text.NumberFormat;
+
 public class MainActivityViewModel extends BaseObservable {
     @Bindable
     private String _coinCount;
@@ -13,13 +15,17 @@ public class MainActivityViewModel extends BaseObservable {
         return this._coinCount;
     }
 
+    private NumberFormat priceFormatter;
 
     public MainActivityViewModel() {
         this._coinCount = "--";
+        this.priceFormatter = NumberFormat.getInstance();
     }
 
     public void setCoinCount(int coinCount) {
-        this._coinCount = String.valueOf(coinCount);
+        // コンマ区切りにする
+        final String formated = this.priceFormatter.format(coinCount);
+        this._coinCount = formated;
         notifyPropertyChanged(BR.coinCount);
     }
 }

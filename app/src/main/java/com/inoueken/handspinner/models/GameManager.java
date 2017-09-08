@@ -39,8 +39,10 @@ public class GameManager {
                 _oldRotationCountChangedSubscription = handspinner.subscribeRotationCountChanged(new Action1<CountChangedEventArgs>() {
                     @Override
                     public void call(CountChangedEventArgs countChangedEventArgs) {
+                        final int productivity = _player.getCurrentHandspinner().getMetadata().getProductivity();
                         final int delta = countChangedEventArgs.getNewCount() - countChangedEventArgs.getOldCount();
-                        _player.earnCoins(delta);
+                        final int amount = productivity * delta;
+                        _player.earnCoins(amount);
                     }
                 });
 
@@ -62,6 +64,9 @@ public class GameManager {
         spinner.addForce(1.0f);
     }
 
+    /**
+     * アプリデータを保存する
+     */
     public void save() {
         AppData appData = new AppData();
         appData.savePlayerData(this._player);

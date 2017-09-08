@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         // 回転シミュレーションを再開する
         this._model.getCurrentHandspinner().rotate();
         this.subscribeEvents();
-  }
+    }
 
     @Override
     protected void onDestroy() {
@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     @Override
     public boolean onDown(MotionEvent e) {
-        this._model.getCurrentHandspinner().setAngularVelocity(0f);
+        this._model.getCurrentHandspinner().setAngularVelocity((float) Math.max(0, this._model.getCurrentHandspinner().getAngularVelocity() - 0.7f));
         beforePositionX = e.getX() - centerX;
         beforePositionY = e.getY() - centerY;
         return true;
@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     @Override
     public void onShowPress(MotionEvent e) {
-
+        this._model.getCurrentHandspinner().setAngularVelocity(0f);
     }
 
     @Override
@@ -269,7 +269,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     @Override
     public void onLongPress(MotionEvent e) {
-
     }
 
     @Override
@@ -286,12 +285,18 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         double theta = Math.atan2(vectorX * vY - vectorY * vX, vectorX * vX + vectorY * vY);
 
         Handspinner s = this._model.getCurrentHandspinner();
+        double speed = s.getMetadata().getSpeed();
+
 
         if (theta < 0) {
-            s.addForce(-(float) (validVelocitySize * arm / 50000));
+            s.addForce(-(float) (validVelocitySize * arm / (220000 - 50000 * calSpeedRate(speed))));
         } else if (theta != 0 && theta != Math.PI) {
-            s.addForce((float) (validVelocitySize * arm / 50000));
+            s.addForce((float) (validVelocitySize * arm / (220000 - 50000 * calSpeedRate(speed))));
         }
         return true;
+    }
+
+    private double calSpeedRate(double speed) {
+        return 2 * Math.log((Math.E - 1) * (speed - 1) / 3 + 1) + 1;
     }
 }

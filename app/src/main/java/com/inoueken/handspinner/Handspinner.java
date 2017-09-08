@@ -46,6 +46,10 @@ public class Handspinner {
         angularVelocity = value;
     }
 
+    public double getAngularVelocity() {
+        return angularVelocity;
+    }
+
     public float getAngle() {
         return angle;
     }
@@ -67,7 +71,7 @@ public class Handspinner {
         final Timer timer = new Timer();
         timer.schedule(new rotationTask(), 0, (long) rotationTaskInterval);
         this._timer = timer;
-   }
+    }
 
     private class rotationTask extends TimerTask {
         public void run() {
