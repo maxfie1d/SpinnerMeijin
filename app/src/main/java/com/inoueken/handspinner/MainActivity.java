@@ -219,7 +219,10 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     @Override
     public boolean onDown(MotionEvent e) {
-        this._model.getCurrentHandspinner().setAngularVelocity((float) Math.max(0, this._model.getCurrentHandspinner().getAngularVelocity() - 0.7f));
+        if (this._model.getCurrentHandspinner().getAngularVelocity() > 0)
+            this._model.getCurrentHandspinner().setAngularVelocity((float) Math.max(0, this._model.getCurrentHandspinner().getAngularVelocity() - 0.7f));
+        else
+            this._model.getCurrentHandspinner().setAngularVelocity((float) Math.min(0, this._model.getCurrentHandspinner().getAngularVelocity() + 0.7f));
         beforePositionX = e.getX() - centerX;
         beforePositionY = e.getY() - centerY;
         return true;

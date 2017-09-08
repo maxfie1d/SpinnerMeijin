@@ -100,14 +100,14 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="かき揚げ 海老と春菊 by MuddyFox"
+            android:text="掻き揚げ (GFDLライセンス)"
             style="@style/CreditSubheader"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autoLink="web"
-            android:text="https://www.photo-ac.com/main/detail/969440" />
+            android:text="https://upload.wikimedia.org/wikipedia/ja/e/eb/Kakiage.jpg" />
 
     </LinearLayout>
 </LinearLayout>
