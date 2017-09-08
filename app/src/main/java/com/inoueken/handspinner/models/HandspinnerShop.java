@@ -81,7 +81,7 @@ public class HandspinnerShop {
                         "何の変哲もない普通のハンドスピナー。ついにかき揚げがハンドスピナーになった。全体的に油まみれでベトベト。もうマジむり。。",
                         1 * 1000 * 1000,
                         1.00f,
-                        1.00f,
+                        0.916f,
                         "kakiage_spinner.png",
                         R.drawable.kakiage_spinner,
                         1));
